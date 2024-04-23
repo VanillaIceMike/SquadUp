@@ -75,4 +75,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("com.airbnb.android:lottie:6.4.0")
+    implementation(libs.google.maps.utils)
 }
