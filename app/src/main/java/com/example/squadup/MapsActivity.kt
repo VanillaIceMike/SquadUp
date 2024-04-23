@@ -15,6 +15,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -37,6 +38,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), locationPermissionRequestCode)
         }
+
+        setupBottomNavigationView()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -64,4 +67,37 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+    private fun setupBottomNavigationView() {
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+
+        // Listener for item selection in the BottomNavigationView
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    // Placeholder for Home
+                    Toast.makeText(this, "Home feature under development", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.navigation_messages -> {
+                    // Placeholder for Messages
+                    Toast.makeText(this, "Messages feature under development", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.navigation_maps -> {
+                    // Already in Maps Activity, no action needed
+                    true
+                }
+                R.id.navigation_notifcations -> {
+                    // Placeholder for Notifications
+                    Toast.makeText(this, "Notifications feature under development", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // Set the Maps item as selected
+        bottomNavigationView.setSelectedItemId(R.id.navigation_maps)
+    }
+
 }

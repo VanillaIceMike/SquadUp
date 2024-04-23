@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/navigation_home"
+        android:title="Home"
+        android:icon="@drawable/home"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/navigation_messages"
+        android:title="Messages"
+        android:icon="@drawable/message"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/navigation_maps"
+        android:title="Maps"
+        android:icon="@drawable/map_search_outline"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/navigation_notifcations"
+        android:title="Notifications"
+        android:icon="@drawable/bell"
+        app:showAsAction="ifRoom" />
+
+</menu>
