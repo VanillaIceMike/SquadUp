@@ -40,7 +40,7 @@ class SignInActivity : AppCompatActivity() {
             passwordResetDialog.setMessage("Enter Your Email To Receive Reset Link.")
             passwordResetDialog.setView(resetMail)
 
-            passwordResetDialog.setPositiveButton("Yes") { dialog, which ->
+            passwordResetDialog.setPositiveButton("Yes") { _, _ ->
                 val email = resetMail.text.toString()
                 firebaseAuth.sendPasswordResetEmail(email)
                     .addOnCompleteListener { task ->
@@ -54,7 +54,7 @@ class SignInActivity : AppCompatActivity() {
                     }
             }
 
-            passwordResetDialog.setNegativeButton("No") { dialog, which ->
+            passwordResetDialog.setNegativeButton("No") { dialog, _ ->
                 dialog.dismiss()
             }
 
