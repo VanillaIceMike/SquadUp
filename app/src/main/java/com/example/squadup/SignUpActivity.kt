@@ -3,6 +3,7 @@ package com.example.squadup
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.squadup.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -14,6 +15,7 @@ class SignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
