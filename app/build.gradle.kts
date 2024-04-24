@@ -57,10 +57,10 @@ dependencies {
 
 
     implementation(platform("com.google.firebase:firebase-bom:30.3.1"))
-    implementation("com.google.firebase:firebase-auth")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation("androidx.activity:activity-compose:1.9.0")
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -85,3 +85,4 @@ dependencies {
     implementation ("com.google.android.material:material:1.10.0")
 
 }
+
