@@ -55,6 +55,9 @@ android {
 
 dependencies {
 
+
+    implementation(platform("com.google.firebase:firebase-bom:30.3.1"))
+    implementation("com.google.firebase:firebase-auth")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -80,4 +83,5 @@ dependencies {
     implementation("com.airbnb.android:lottie:6.4.0")
     implementation(libs.google.maps.utils)
     implementation ("com.google.android.material:material:1.10.0")
+
 }
