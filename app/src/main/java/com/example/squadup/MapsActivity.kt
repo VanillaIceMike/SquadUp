@@ -2,12 +2,15 @@ package com.example.squadup
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.location.Location
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.squadup.databinding.ActivityMapsBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -15,12 +18,15 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.maps.android.clustering.ClusterItem
 import com.google.maps.android.clustering.ClusterManager
-
+import com.google.maps.android.clustering.view.DefaultClusterRenderer
+import java.util.Locale
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -47,6 +53,34 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         override fun getSnippet(): String? {
             return "Tap for details"
         }
+
+    }
+
+    private fun getIconForType(type: String): BitmapDescriptor {
+        val drawableId = when (type.lowercase(Locale.ROOT)) {
+            "pickleball" -> R.drawable.pickleballmarker
+            "spikeball" -> R.drawable.spikeballmarker
+            "soccer" -> R.drawable.soccermarker
+            "tennis" -> R.drawable.tennismarker
+            "baseball" -> R.drawable.baseballmarker
+            "basketball" -> R.drawable.basketballmarker
+            "golf" -> R.drawable.golfmarker
+            "bowling" -> R.drawable.bowlingmarker
+            "football" -> R.drawable.footballmarker
+            "volleyball" -> R.drawable.volleyballmarker
+            else -> R.drawable.plainmarker
+        }
+        return drawableToBitmap(drawableId)
+    }
+
+    private fun drawableToBitmap(drawableId: Int): BitmapDescriptor {
+        val drawable = ContextCompat.getDrawable(this, drawableId)
+        val bitmap = Bitmap.createBitmap(drawable!!.intrinsicWidth,
+            drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 
 
@@ -119,16 +153,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun setupClusterManager() {
         // Initialize the ClusterManager
         clusterManager = ClusterManager<SportsPosting>(this, mMap)
+
+        // Set a custom renderer that uses the custom icons defined in the SportsPosting class
+        clusterManager.renderer = object : DefaultClusterRenderer<SportsPosting>(this, mMap, clusterManager) {
+            override fun onBeforeClusterItemRendered(item: SportsPosting, markerOptions: MarkerOptions) {
+                // Use the getMarkerIcon method from the SportsPosting instance to set the marker icon
+                markerOptions.icon(getIconForType(item.type))
+            }
+        }
+
+        // Set the map's listeners for the cluster manager
         mMap.setOnCameraIdleListener(clusterManager)
         mMap.setOnMarkerClickListener(clusterManager)
     }
 
     private fun addGameMarkers() {
-        val sportsPostings = getSportsPostings()  // Assuming this function returns your postings
-        for (posting in sportsPostings) {
+        val sportsPostings = getSportsPostings() // Assuming this function returns your postings
+        // Just add the items to the cluster manager
+        sportsPostings.forEach { posting ->
             clusterManager.addItem(posting)
         }
-        clusterManager.cluster()  // Force a re-cluster
+        clusterManager.cluster() // Force a re-cluster
     }
 
     private fun setupBottomNavigationView() {
