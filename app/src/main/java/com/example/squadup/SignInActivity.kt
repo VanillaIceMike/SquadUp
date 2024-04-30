@@ -12,10 +12,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
+import java.util.concurrent.TimeUnit
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var phoneNumber: String  // You need to store the user's phone number
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +38,9 @@ class SignInActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         val signInButton: Button = findViewById(R.id.signInButton)
+        // Properly link the signInUser function to the onClick listener
         signInButton.setOnClickListener {
-            val intent = Intent(this, MapsActivity::class.java)
-            startActivity(intent)
+            signInUser()
         }
 
         val signUpText: TextView = findViewById(R.id.textView)
@@ -70,5 +77,71 @@ class SignInActivity : AppCompatActivity() {
             passwordResetDialog.create().show()
         }
 
+    }
+
+    private fun signInUser() {
+        val email = findViewById<EditText>(R.id.emailEt).text.toString().trim()
+        val password = findViewById<EditText>(R.id.passET).text.toString().trim()
+
+        if (email.isNotEmpty() && password.isNotEmpty()) {
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val user = firebaseAuth.currentUser
+                    val phoneNumber = user?.phoneNumber ?: ""
+                    if (phoneNumber.isNotEmpty()) {
+                        startPhoneNumberVerification(phoneNumber)
+                    } else {
+                        Toast.makeText(this, "Phone number not found. Please ensure your account has a phone number associated.", Toast.LENGTH_LONG).show()
+                    }
+                } else {
+                    Toast.makeText(this, "Sign in failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    private fun startPhoneNumberVerification(phoneNumber: String) {
+        val options = PhoneAuthOptions.newBuilder(firebaseAuth)
+            .setPhoneNumber(phoneNumber)
+            .setTimeout(60L, TimeUnit.SECONDS)
+            .setActivity(this)
+            .setCallbacks(phoneAuthCallbacks())
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(options)
+    }
+
+    private fun phoneAuthCallbacks() = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+            // Auto-verification case
+            signInWithPhoneAuthCredential(credential)
+        }
+
+        override fun onVerificationFailed(e: FirebaseException) {
+            Toast.makeText(this@SignInActivity, "Verification failed: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
+            val intent = Intent(this@SignInActivity, CodeVerificationActivity2::class.java)
+            intent.putExtra("verificationId", verificationId)
+            startActivity(intent)
+        }
+    }
+
+    private fun showVerificationCodeDialog(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
+        // Implementation similar to the one in SignUpActivity
+    }
+
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {
+                // Redirect the user to the main activity or another activity as necessary
+                Toast.makeText(this, "Successfully signed in", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Sign in failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
