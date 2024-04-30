@@ -1,6 +1,7 @@
 package com.example.squadup
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -184,7 +185,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             when (item.itemId) {
                 R.id.navigation_home -> {
                     // Placeholder for Home
-                    Toast.makeText(this, "Home feature under development", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, HomeActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.navigation_messages -> {
