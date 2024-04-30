@@ -1,0 +1,525 @@
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\">\r\n    <uses-permission android:name=\"android.permission.INTERNET\"/>\r\n    <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>\r\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>\r\n\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n        android:fullBackupContent=\"@xml/backup_rules\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.SquadUp\"\r\n        tools:targetApi=\"31\">\r\n\r\n        <meta-data\r\n            android:name=\"com.google.android.geo.API_KEY\"\r\n            android:value=\"AIzaSyDGrtAG2j_aGeo3suM6Q8aGyqMUhEARalM\" />\r\n\r\n        <activity\r\n            android:name=\".SplashActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n            <meta-data\r\n                android:name=\"android.app.lib_name\"\r\n                android:value=\"\" />\r\n        </activity>\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:exported=\"false\">\r\n            <meta-data\r\n                android:name=\"android.app.lib_name\"\r\n                android:value=\"\" />\r\n        </activity>\r\n\r\n        <activity\r\n            android:name=\".MapsActivity\"\r\n            android:exported=\"false\"\r\n            android:label=\"@string/title_activity_maps\">\r\n        </activity>\r\n\r\n        <activity\r\n            android:name=\".SignUpActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".SignInActivity\"\r\n            android:exported=\"false\" />\r\n\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	
++++ b/app/src/main/AndroidManifest.xml	
+@@ -1,11 +1,11 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools">
+-    <uses-permission android:name="android.permission.INTERNET"/>
+-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
++
++    <uses-permission android:name="android.permission.INTERNET" />
++    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
++    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+ 
+-
+     <application
+         android:allowBackup="true"
+         android:dataExtractionRules="@xml/data_extraction_rules"
+@@ -16,6 +16,9 @@
+         android:supportsRtl="true"
+         android:theme="@style/Theme.SquadUp"
+         tools:targetApi="31">
++        <activity
++            android:name=".CodeVerificationActivity"
++            android:exported="false" />
+ 
+         <meta-data
+             android:name="com.google.android.geo.API_KEY"
+@@ -29,6 +32,7 @@
+ 
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
++
+             <meta-data
+                 android:name="android.app.lib_name"
+                 android:value="" />
+@@ -38,22 +42,18 @@
+             android:exported="false">
+             <meta-data
+                 android:name="android.app.lib_name"
+-                android:value="" />
++                android:value="false" />
+         </activity>
+-
+         <activity
+             android:name=".MapsActivity"
+             android:exported="false"
+-            android:label="@string/title_activity_maps">
+-        </activity>
+-
++            android:label="@string/title_activity_maps"></activity>
+         <activity
+             android:name=".SignUpActivity"
+             android:exported="false" />
+         <activity
+             android:name=".SignInActivity"
+             android:exported="false" />
+-
+     </application>
+ 
+ </manifest>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_sign_up.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@drawable/signup_screen\"\r\n    tools:context=\".SignUpActivity\">\r\n\r\n    <!-- Username Input Layout - margin adjusted to push it below the header -->\r\n    <com.google.android.material.textfield.TextInputLayout\r\n        android:id=\"@+id/usernameLayout\"\r\n        style=\"@style/LoginTextInputOuterFieldStyle\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"32dp\"\r\n        android:layout_marginTop=\"340dp\"\r\n        android:layout_marginEnd=\"32dp\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\">\r\n\r\n    <com.google.android.material.textfield.TextInputEditText\r\n        android:id=\"@+id/usernameEt\"\r\n        style=\"@style/LoginTextInputInnerFieldStyle\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:hint=\"@string/username\" />\r\n</com.google.android.material.textfield.TextInputLayout>\r\n\r\n    <!-- Email Input Layout -->\r\n    <com.google.android.material.textfield.TextInputLayout\r\n        android:id=\"@+id/emailLayout\"\r\n        style=\"@style/LoginTextInputOuterFieldStyle\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"32dp\"\r\n        android:layout_marginTop=\"16dp\"\r\n        android:layout_marginEnd=\"32dp\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/usernameLayout\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\">\r\n\r\n        <com.google.android.material.textfield.TextInputEditText\r\n            android:id=\"@+id/emailEt\"\r\n            style=\"@style/LoginTextInputInnerFieldStyle\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:hint=\"@string/type_your_email\"\r\n            android:inputType=\"textEmailAddress\" />\r\n    </com.google.android.material.textfield.TextInputLayout>\r\n\r\n    <!-- Password Input Layout -->\r\n    <com.google.android.material.textfield.TextInputLayout\r\n        android:id=\"@+id/passwordLayout\"\r\n        style=\"@style/LoginTextInputOuterFieldStyle\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"32dp\"\r\n        android:layout_marginTop=\"16dp\"\r\n        android:layout_marginEnd=\"32dp\"\r\n        app:endIconMode=\"password_toggle\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/emailLayout\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\">\r\n\r\n        <com.google.android.material.textfield.TextInputEditText\r\n            android:id=\"@+id/passET\"\r\n            style=\"@style/LoginTextInputInnerFieldStyle\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:hint=\"@string/type_your_password\"\r\n            android:inputType=\"textPassword\" />\r\n    </com.google.android.material.textfield.TextInputLayout>\r\n\r\n    <!-- Confirm Password Input Layout -->\r\n    <com.google.android.material.textfield.TextInputLayout\r\n        android:id=\"@+id/confirmPasswordLayout\"\r\n        style=\"@style/LoginTextInputOuterFieldStyle\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"32dp\"\r\n        android:layout_marginTop=\"16dp\"\r\n        android:layout_marginEnd=\"32dp\"\r\n        app:endIconMode=\"password_toggle\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/passwordLayout\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\">\r\n\r\n        <com.google.android.material.textfield.TextInputEditText\r\n            android:id=\"@+id/confirmPassEt\"\r\n            style=\"@style/LoginTextInputInnerFieldStyle\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:hint=\"@string/retype_your_password\"\r\n            android:inputType=\"textPassword\" />\r\n    </com.google.android.material.textfield.TextInputLayout>\r\n\r\n    <!-- Sign Up Button -->\r\n    <androidx.appcompat.widget.AppCompatButton\r\n        android:id=\"@+id/button\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"32dp\"\r\n        android:layout_marginTop=\"16dp\"\r\n        android:layout_marginEnd=\"32dp\"\r\n        android:layout_marginBottom=\"16dp\"\r\n        android:background=\"@color/purple_700\"\r\n        android:text=\"@string/sign_up\"\r\n        android:textColor=\"#FFFFFF\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/confirmPasswordLayout\"\r\n        app:layout_constraintBottom_toTopOf=\"@id/textView\" />\r\n\r\n    <!-- Already Registered TextView -->\r\n    <TextView\r\n        android:id=\"@+id/textView\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textColor=\"@color/black\"\r\n        android:text=\"@string/already_registered_sign_in\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        android:layout_marginBottom=\"32dp\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_sign_up.xml b/app/src/main/res/layout/activity_sign_up.xml
+--- a/app/src/main/res/layout/activity_sign_up.xml	
++++ b/app/src/main/res/layout/activity_sign_up.xml	
+@@ -96,6 +96,40 @@
+             android:inputType="textPassword" />
+     </com.google.android.material.textfield.TextInputLayout>
+ 
++    <!-- Phone Number Input Layout -->
++    <com.google.android.material.textfield.TextInputLayout
++        android:id="@+id/phoneNumberLayout"
++        style="@style/LoginTextInputOuterFieldStyle"
++        android:layout_width="0dp"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="32dp"
++        android:layout_marginTop="16dp"
++        android:layout_marginEnd="32dp"
++        app:endIconMode="clear_text"
++        app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintEnd_toEndOf="parent">
++
++        <com.hbb20.CountryCodePicker
++            android:id="@+id/countryCodePicker"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            app:ccp_defaultNameCode="US"
++            app:layout_constraintBottom_toBottomOf="@id/phoneEt"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintTop_toTopOf="@id/phoneEt"
++            app:layout_constraintEnd_toStartOf="@id/phoneEt"/>
++
++        <com.google.android.material.textfield.TextInputEditText
++            android:id="@+id/phoneEt"
++            style="@style/LoginTextInputInnerFieldStyle"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:hint="@string/phone_number"
++            android:inputType="phone" />
++    </com.google.android.material.textfield.TextInputLayout>
++
++
+     <!-- Sign Up Button -->
+     <androidx.appcompat.widget.AppCompatButton
+         android:id="@+id/button"
+Index: app/src/main/java/com/example/squadup/SignUpActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.squadup\r\n\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport android.widget.Toast\r\nimport androidx.activity.enableEdgeToEdge\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport com.example.squadup.databinding.ActivitySignUpBinding\r\nimport com.google.firebase.auth.FirebaseAuth\r\nimport com.google.firebase.auth.ktx.userProfileChangeRequest\r\n\r\n\r\n\r\nclass SignUpActivity : AppCompatActivity() {\r\n\r\n    private lateinit var binding: ActivitySignUpBinding\r\n    private lateinit var firebaseAuth: FirebaseAuth\r\n\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        enableEdgeToEdge()\r\n\r\n        binding = ActivitySignUpBinding.inflate(layoutInflater)\r\n        setContentView(binding.root)\r\n\r\n        firebaseAuth = FirebaseAuth.getInstance()\r\n\r\n        binding.textView.setOnClickListener {\r\n            val intent = Intent(this, SignInActivity::class.java)\r\n            startActivity(intent)\r\n        }\r\n\r\n        binding.button.setOnClickListener {\r\n            val email = binding.emailEt.text.toString().trim()\r\n            val pass = binding.passET.text.toString().trim()\r\n            val confirmPass = binding.confirmPassEt.text.toString().trim()\r\n            val username = binding.usernameEt.text.toString().trim()\r\n\r\n            if (email.isNotEmpty() && pass.isNotEmpty() && confirmPass.isNotEmpty() && username.isNotEmpty()) {\r\n                if (pass == confirmPass) {\r\n                    firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener { task ->\r\n                        if (task.isSuccessful) {\r\n                            // Update the user profile with their display name\r\n                            val user = firebaseAuth.currentUser\r\n                            val profileUpdates = userProfileChangeRequest {\r\n                                displayName = username\r\n                            }\r\n                            user?.updateProfile(profileUpdates)?.addOnCompleteListener { profileUpdateTask ->\r\n                                if (profileUpdateTask.isSuccessful) {\r\n                                    Toast.makeText(this, \"User created successfully with name.\", Toast.LENGTH_SHORT).show()\r\n                                    startActivity(Intent(this, SignInActivity::class.java))\r\n                                    finish()\r\n                                } else {\r\n                                    Toast.makeText(this, \"Failed to set user name.\", Toast.LENGTH_SHORT).show()\r\n                                }\r\n                            }\r\n                        } else {\r\n                            Toast.makeText(this, \"Registration failed: \" + task.exception?.message, Toast.LENGTH_SHORT).show()\r\n                        }\r\n                    }\r\n\r\n                } else {\r\n                    Toast.makeText(this, \"Passwords do not match.\", Toast.LENGTH_SHORT).show()\r\n                }\r\n            } else {\r\n                Toast.makeText(this, \"All fields are required.\", Toast.LENGTH_SHORT).show()\r\n            }\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/squadup/SignUpActivity.kt b/app/src/main/java/com/example/squadup/SignUpActivity.kt
+--- a/app/src/main/java/com/example/squadup/SignUpActivity.kt	
++++ b/app/src/main/java/com/example/squadup/SignUpActivity.kt	
+@@ -1,13 +1,23 @@
+ package com.example.squadup
+ 
+-import android.content.Intent
++import android.app.Dialog
+ import android.os.Bundle
++import android.widget.Button
++import android.widget.EditText
+ import android.widget.Toast
+-import androidx.activity.enableEdgeToEdge
+ import androidx.appcompat.app.AppCompatActivity
+ import com.example.squadup.databinding.ActivitySignUpBinding
++import android.content.Intent
++import android.view.ViewGroup
++import androidx.activity.enableEdgeToEdge
++import com.google.firebase.FirebaseException
+ import com.google.firebase.auth.FirebaseAuth
++import com.google.firebase.auth.PhoneAuthCredential
++import com.google.firebase.auth.PhoneAuthOptions
++import com.google.firebase.auth.PhoneAuthProvider
+ import com.google.firebase.auth.ktx.userProfileChangeRequest
++import java.util.concurrent.TimeUnit
++import com.hbb20.CountryCodePicker
+ 
+ 
+ 
+@@ -15,6 +25,7 @@
+ 
+     private lateinit var binding: ActivitySignUpBinding
+     private lateinit var firebaseAuth: FirebaseAuth
++    private lateinit var ccp: CountryCodePicker
+ 
+ 
+     override fun onCreate(savedInstanceState: Bundle?) {
+@@ -25,6 +36,8 @@
+         setContentView(binding.root)
+ 
+         firebaseAuth = FirebaseAuth.getInstance()
++        ccp = binding.countryCodePicker
++        ccp.registerCarrierNumberEditText(binding.phoneEt)
+ 
+         binding.textView.setOnClickListener {
+             val intent = Intent(this, SignInActivity::class.java)
+@@ -36,8 +49,10 @@
+             val pass = binding.passET.text.toString().trim()
+             val confirmPass = binding.confirmPassEt.text.toString().trim()
+             val username = binding.usernameEt.text.toString().trim()
++            val phoneNumber = ccp.fullNumberWithPlus.trim()
+ 
+-            if (email.isNotEmpty() && pass.isNotEmpty() && confirmPass.isNotEmpty() && username.isNotEmpty()) {
++
++            if (email.isNotEmpty() && pass.isNotEmpty() && confirmPass.isNotEmpty() && username.isNotEmpty() && phoneNumber.isNotEmpty()) {
+                 if (pass == confirmPass) {
+                     firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener { task ->
+                         if (task.isSuccessful) {
+@@ -48,24 +63,95 @@
+                             }
+                             user?.updateProfile(profileUpdates)?.addOnCompleteListener { profileUpdateTask ->
+                                 if (profileUpdateTask.isSuccessful) {
+-                                    Toast.makeText(this, "User created successfully with name.", Toast.LENGTH_SHORT).show()
+-                                    startActivity(Intent(this, SignInActivity::class.java))
+-                                    finish()
++                                    verifyPhoneNumber(phoneNumber) // Trigger phone number verification
+                                 } else {
+-                                    Toast.makeText(this, "Failed to set user name.", Toast.LENGTH_SHORT).show()
++                                    Toast.makeText(this, "Failed to update user profile.", Toast.LENGTH_SHORT).show()
+                                 }
+                             }
+                         } else {
+-                            Toast.makeText(this, "Registration failed: " + task.exception?.message, Toast.LENGTH_SHORT).show()
++                            Toast.makeText(this, "Signup failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                         }
+                     }
+-
+                 } else {
+                     Toast.makeText(this, "Passwords do not match.", Toast.LENGTH_SHORT).show()
+                 }
+             } else {
+-                Toast.makeText(this, "All fields are required.", Toast.LENGTH_SHORT).show()
++                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+             }
+         }
+     }
+-}
++    private fun verifyPhoneNumber(phoneNumber: String) {
++        val options = PhoneAuthOptions.newBuilder(firebaseAuth)
++            .setPhoneNumber(phoneNumber) // Phone number to verify
++            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
++            .setActivity(this) // Activity (for callback binding)
++            .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
++            .build()
++        PhoneAuthProvider.verifyPhoneNumber(options)
++    }
++
++    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
++        val user = firebaseAuth.currentUser
++        if (user != null) {
++            // Link the phone number if the user exists and is signed in.
++            user.linkWithCredential(credential).addOnCompleteListener(this) { task ->
++                if (task.isSuccessful) {
++                    Toast.makeText(this, "Phone number linked", Toast.LENGTH_SHORT).show()
++                    val signInIntent = Intent(this, SignInActivity::class.java)
++                    signInIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
++                    startActivity(signInIntent)
++                } else {
++                    Toast.makeText(this, "Linking phone number failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
++                }
++            }
++        } else {
++            // Handle the case where there is no user signed in (optional based on your flow).
++            Toast.makeText(this, "No user account found to link", Toast.LENGTH_SHORT).show()
++        }
++    }
++
++
++
++    private fun showVerificationCodeDialog(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
++        val dialog = Dialog(this)
++        dialog.setContentView(R.layout.activity_code_verification)
++        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
++
++        val codeEditText: EditText = dialog.findViewById(R.id.codeEt)
++        val verifyButton: Button = dialog.findViewById(R.id.verifyBtn)
++        val backButton: Button = dialog.findViewById(R.id.backBtn)
++
++        verifyButton.setOnClickListener {
++            val code = codeEditText.text.toString().trim()
++            if (code.isNotEmpty()) {
++                val credential = PhoneAuthProvider.getCredential(verificationId, code)
++                signInWithPhoneAuthCredential(credential)
++            } else {
++                Toast.makeText(this, "Please enter the verification code", Toast.LENGTH_SHORT).show()
++            }
++        }
++
++        backButton.setOnClickListener {
++            dialog.dismiss()
++        }
++
++        dialog.show()
++    }
++
++
++    private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
++        override fun onVerificationCompleted(credential: PhoneAuthCredential) {
++            // Optionally sign in the user directly if instant verification is successful
++            signInWithPhoneAuthCredential(credential)
++        }
++
++        override fun onVerificationFailed(e: FirebaseException) {
++            Toast.makeText(this@SignUpActivity, "Verification failed: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
++        }
++
++        override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
++            // Show dialog with input for verification code
++            showVerificationCodeDialog(verificationId, token)
++        }
++    }
++}
+\ No newline at end of file
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.android.application)\r\n    alias(libs.plugins.jetbrains.kotlin.android)\r\n    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)\r\n    alias(libs.plugins.google.gms.google.services)\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.example.squadup\"\r\n    compileSdk = 34\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.example.squadup\"\r\n        minSdk = 24\r\n        targetSdk = 34\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n        vectorDrawables {\r\n            useSupportLibrary = true\r\n        }\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_1_8\r\n        targetCompatibility = JavaVersion.VERSION_1_8\r\n    }\r\n    kotlinOptions {\r\n        jvmTarget = \"1.8\"\r\n    }\r\n    buildFeatures {\r\n        compose = true\r\n        viewBinding = true\r\n        dataBinding = true\r\n    }\r\n    composeOptions {\r\n        kotlinCompilerExtensionVersion = \"1.5.1\"\r\n    }\r\n    packaging {\r\n        resources {\r\n            excludes += \"/META-INF/{AL2.0,LGPL2.1}\"\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n\r\n    implementation(platform(\"com.google.firebase:firebase-bom:30.3.1\"))\r\n    implementation(libs.androidx.core.ktx)\r\n    implementation(libs.androidx.lifecycle.runtime.ktx)\r\n    implementation(libs.androidx.activity.compose)\r\n    implementation(\"androidx.activity:activity-compose:1.9.0\")\r\n    implementation(platform(libs.androidx.compose.bom))\r\n    implementation(libs.androidx.ui)\r\n    implementation(libs.androidx.ui.graphics)\r\n    implementation(libs.androidx.ui.tooling.preview)\r\n    implementation(libs.androidx.material3)\r\n    implementation(libs.androidx.appcompat)\r\n    implementation(libs.material)\r\n    implementation(libs.androidx.activity)\r\n    implementation(libs.androidx.constraintlayout)\r\n    implementation(libs.play.services.maps)\r\n    implementation(libs.places)\r\n    implementation(libs.firebase.auth)\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.androidx.junit)\r\n    androidTestImplementation(libs.androidx.espresso.core)\r\n    androidTestImplementation(platform(libs.androidx.compose.bom))\r\n    androidTestImplementation(libs.androidx.ui.test.junit4)\r\n    debugImplementation(libs.androidx.ui.tooling)\r\n    debugImplementation(libs.androidx.ui.test.manifest)\r\n    implementation(\"com.airbnb.android:lottie:6.4.0\")\r\n    implementation(libs.google.maps.utils)\r\n    implementation (\"com.google.android.material:material:1.10.0\")\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	
++++ b/app/build.gradle.kts	
+@@ -83,6 +83,9 @@
+     implementation("com.airbnb.android:lottie:6.4.0")
+     implementation(libs.google.maps.utils)
+     implementation ("com.google.android.material:material:1.10.0")
++    implementation ("com.hbb20:ccp:2.5.3")
++    implementation ("androidx.browser:browser:1.3.0")
++
+ 
+ }
+ 
+Index: app/src/main/res/layout/activity_sign_in.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:id=\"@+id/main\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@drawable/signin_screen\"\r\n    tools:context=\".SignInActivity\">\r\n\r\n\r\n    <com.google.android.material.textfield.TextInputLayout\r\n        android:id=\"@+id/emailLayout\"\r\n        style=\"@style/LoginTextInputOuterFieldStyle\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginHorizontal=\"16dp\"\r\n        android:layout_marginTop=\"350dp\"\r\n        app:boxStrokeColor=\"@color/purple_700\"\r\n        app:hintTextColor=\"@color/purple_700\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.5\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\">\r\n\r\n        <com.google.android.material.textfield.TextInputEditText\r\n            android:id=\"@+id/emailEt\"\r\n            style=\"@style/LoginTextInputInnerFieldStyle\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:hint=\"Type your Email\"\r\n            android:inputType=\"textEmailAddress\" />\r\n    </com.google.android.material.textfield.TextInputLayout>\r\n\r\n    <com.google.android.material.textfield.TextInputLayout\r\n        android:id=\"@+id/passwordLayout\"\r\n        style=\"@style/LoginTextInputOuterFieldStyle\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginHorizontal=\"16dp\"\r\n        android:layout_marginTop=\"24dp\"\r\n        app:boxStrokeColor=\"@color/purple_700\"\r\n        app:hintTextColor=\"@color/purple_700\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.5\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/emailLayout\"\r\n        app:passwordToggleEnabled=\"true\">\r\n\r\n        <com.google.android.material.textfield.TextInputEditText\r\n            android:id=\"@+id/passET\"\r\n            style=\"@style/LoginTextInputInnerFieldStyle\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:hint=\"Type Your Password\"\r\n            android:inputType=\"textPassword\" />\r\n    </com.google.android.material.textfield.TextInputLayout>\r\n\r\n    <androidx.appcompat.widget.AppCompatButton\r\n        android:id=\"@+id/signInButton\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginHorizontal=\"16dp\"\r\n        android:background=\"@color/purple_700\"\r\n        android:text=\"Sign In\"\r\n        android:textColor=\"#0288D1\"\r\n        android:textStyle=\"bold\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.5\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/passwordLayout\" />\r\n\r\n    <Button\r\n        android:id=\"@+id/forgotPasswordButton\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"16dp\"\r\n        android:text=\"Forgot Password\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/button\"\r\n        app:layout_constraintStart_toStartOf=\"@id/button\"\r\n        app:layout_constraintEnd_toEndOf=\"@id/button\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textColor=\"@color/black\"\r\n        android:text=\"Not Registered Yet, Sign Up!\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.5\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/forgotPasswordButton\" />\r\n\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_sign_in.xml b/app/src/main/res/layout/activity_sign_in.xml
+--- a/app/src/main/res/layout/activity_sign_in.xml	
++++ b/app/src/main/res/layout/activity_sign_in.xml	
+@@ -61,37 +61,36 @@
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_marginHorizontal="16dp"
++        android:layout_marginTop="24dp"
+         android:background="@color/purple_700"
+         android:text="Sign In"
+         android:textColor="#0288D1"
+         android:textStyle="bold"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="0.5"
++        app:layout_constraintTop_toBottomOf="@id/passwordLayout"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/passwordLayout" />
++        app:layout_constraintEnd_toEndOf="parent" />
+ 
+     <Button
+         android:id="@+id/forgotPasswordButton"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:layout_marginTop="16dp"
+         android:text="Forgot Password"
+-        app:layout_constraintTop_toBottomOf="@id/button"
+-        app:layout_constraintStart_toStartOf="@id/button"
+-        app:layout_constraintEnd_toEndOf="@id/button" />
++        app:layout_constraintTop_toBottomOf="@id/signInButton"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        android:layout_marginTop="16dp" />
+ 
+     <TextView
+         android:id="@+id/textView"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:textColor="@color/black"
+         android:text="Not Registered Yet, Sign Up!"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="0.5"
++        android:textColor="@color/black"
++        app:layout_constraintTop_toBottomOf="@id/forgotPasswordButton"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/forgotPasswordButton" />
+-
++        app:layout_constraintEnd_toEndOf="parent"
++        android:layout_marginTop="16dp"
++        app:layout_constraintBottom_toBottomOf="parent"
++        android:layout_marginBottom="32dp" />
+ 
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/squadup/CodeVerificationActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/squadup/CodeVerificationActivity.kt b/app/src/main/java/com/example/squadup/CodeVerificationActivity.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/example/squadup/CodeVerificationActivity.kt	
+@@ -0,0 +1,87 @@
++package com.example.squadup
++
++import android.content.Intent
++import android.os.Bundle
++import android.widget.Button
++import android.widget.Toast
++import androidx.appcompat.app.AppCompatActivity
++import androidx.activity.enableEdgeToEdge
++import androidx.core.view.ViewCompat
++import androidx.core.view.WindowInsetsCompat
++import com.example.squadup.databinding.ActivityCodeVerificationBinding
++import com.google.firebase.auth.FirebaseAuth
++import com.google.firebase.auth.PhoneAuthCredential
++import com.google.firebase.auth.PhoneAuthProvider
++
++class CodeVerificationActivity : AppCompatActivity() {
++
++    private lateinit var binding: ActivityCodeVerificationBinding
++    private lateinit var firebaseAuth: FirebaseAuth
++
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++        enableEdgeToEdge()
++
++        binding = ActivityCodeVerificationBinding.inflate(layoutInflater)
++        setContentView(binding.root)
++
++
++        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
++            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
++            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
++            insets
++        }
++
++        firebaseAuth = FirebaseAuth.getInstance()
++
++        val verificationId = intent.getStringExtra("verificationId")
++
++        binding.verifyBtn.setOnClickListener {
++            val code = binding.codeEt.text.toString().trim()
++            if (code.isNotEmpty()) {
++                verifyCode(verificationId, code)
++            } else {
++                Toast.makeText(this, "Please enter the verification code", Toast.LENGTH_SHORT)
++                    .show()
++            }
++        }
++
++        // Set the click listener for the back button
++        val backButton: Button = findViewById(R.id.backBtn)
++        backButton.setOnClickListener {
++            // Finish the current activity
++            finish()
++        }
++    }
++
++    private fun verifyCode(verificationId: String?, code: String) {
++        if (verificationId != null) {
++            val credential = PhoneAuthProvider.getCredential(verificationId, code)
++            signInWithPhoneAuthCredential(credential)
++        } else {
++            Toast.makeText(this, "Verification ID is null", Toast.LENGTH_SHORT).show()
++        }
++    }
++
++    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
++        firebaseAuth.signInWithCredential(credential)
++            .addOnCompleteListener(this) { task ->
++                if (task.isSuccessful) {
++                    Toast.makeText(this, "Verification successful", Toast.LENGTH_SHORT).show()
++                    // Redirect the user to SignInActivity
++                    val signInIntent = Intent(this, SignInActivity::class.java)
++                    signInIntent.flags =
++                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
++                    startActivity(signInIntent)
++                } else {
++                    // If sign in fails, display a message to the user.
++                    Toast.makeText(
++                        this,
++                        "Verification failed: ${task.exception?.message}",
++                        Toast.LENGTH_SHORT
++                    ).show()
++                }
++            }
++    }
++}
++
+Index: app/src/main/res/layout/activity_code_verification.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_code_verification.xml b/app/src/main/res/layout/activity_code_verification.xml
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/res/layout/activity_code_verification.xml	
+@@ -0,0 +1,30 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical"
++    android:padding="16dp">
++
++    <EditText
++        android:id="@+id/codeEt"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:hint="Enter verification code"
++        android:inputType="numberDecimal"
++        android:minHeight="48dp" />
++
++    <Button
++        android:id="@+id/verifyBtn"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:text="Verify"
++        android:layout_marginTop="16dp"/>
++
++    <Button
++        android:id="@+id/backBtn"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:text="Back"
++        android:layout_marginTop="16dp"/>
++
++</LinearLayout>
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_17\" default=\"true\" project-jdk-name=\"jbr-17\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	
++++ b/.idea/misc.xml	
+@@ -1,4 +1,3 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ExternalStorageConfigurationManager" enabled="true" />
+   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">

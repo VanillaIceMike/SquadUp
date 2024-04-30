@@ -83,6 +83,9 @@ dependencies {
     implementation("com.airbnb.android:lottie:6.4.0")
     implementation(libs.google.maps.utils)
     implementation ("com.google.android.material:material:1.10.0")
+    implementation ("com.hbb20:ccp:2.5.3")
+    implementation ("androidx.browser:browser:1.3.0")
+
 
 }
 
