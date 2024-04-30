@@ -32,7 +32,7 @@ class SignInActivity : AppCompatActivity() {
 
         val signInButton: Button = findViewById(R.id.signInButton)
         signInButton.setOnClickListener {
-            val intent = Intent(this, MapsActivity::class.java)
+            val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
         }
 
