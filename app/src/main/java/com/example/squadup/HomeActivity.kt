@@ -33,6 +33,8 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.navigation_messages -> {
+                    val intent = Intent(this, ProfileSetupActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.navigation_maps -> {

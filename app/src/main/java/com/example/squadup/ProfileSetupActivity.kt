@@ -22,17 +22,23 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 
-
 class ProfileSetupActivity : AppCompatActivity() {
 
     private lateinit var imageViewProfile: ImageView
+    private var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_profile_setup)
         enableEdgeToEdge()
+
+        imageViewProfile = findViewById(R.id.image_profile)
         val buttonTakePhoto = findViewById<Button>(R.id.button_take_photo)
         val buttonChooseImage = findViewById<Button>(R.id.button_choose_image)
         val buttonSkip = findViewById<Button>(R.id.button_skip)
+
+        loadExistingProfilePicture()
 
         buttonTakePhoto.setOnClickListener {
             ImagePicker.with(this)
@@ -54,17 +60,61 @@ class ProfileSetupActivity : AppCompatActivity() {
 
 
         buttonSkip.setOnClickListener { finish() }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
             val uri = data?.data
-            imageViewProfile.setImageURI(uri) // Handle the loaded image directly to an ImageView
+            if (uri != null) {
+                updateFirebaseUserProfile(uri)
+                imageViewProfile.setImageURI(uri) // Handle the loaded image directly to an ImageView
+            } else {
+                Toast.makeText(this, "Unable to retrieve image URI.", Toast.LENGTH_SHORT).show()
+            }
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
             Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    private fun updateFirebaseUserProfile(uri: Uri) {
+        val user = firebaseAuth.currentUser
+
+        if (user != null) {
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setPhotoUri(uri)
+                .build()
+
+            user.updateProfile(profileUpdates)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(this, "Profile picture updated!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Failed to update profile picture.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        } else {
+            Toast.makeText(this, "User not logged in.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun loadExistingProfilePicture() {
+        val user = firebaseAuth.currentUser
+
+        if (user != null) {
+            val photoUri: Uri? = user.photoUrl
+
+            if (photoUri != null) {
+                imageViewProfile.setImageURI(photoUri)
+            } else {
+                imageViewProfile.setImageResource(R.drawable.profile_pic_placeholder)
+            }
+        } else {
+            imageViewProfile.setImageResource(R.drawable.profile_pic_placeholder)
         }
     }
 }

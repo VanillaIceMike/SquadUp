@@ -26,5 +26,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
+
+        val bypass: Button = findViewById(R.id.bypassButton)
+        bypass.setOnClickListener {
+            val intent = Intent(this, ProfileSetupActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
