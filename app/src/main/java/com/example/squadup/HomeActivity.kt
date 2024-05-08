@@ -39,7 +39,8 @@ class HomeActivity : AppCompatActivity() {
 
         // Settings icon click listener
         settingsIcon.setOnClickListener {
-
+            val intent = Intent(this, ProfileSetupActivity::class.java)
+            startActivity(intent)
         }
 
         // Setup bottom navigation
