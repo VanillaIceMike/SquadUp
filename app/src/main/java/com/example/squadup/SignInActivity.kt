@@ -120,6 +120,7 @@ class SignInActivity : AppCompatActivity() {
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
+            println("Verification failed: ${e.localizedMessage}")
             Toast.makeText(this@SignInActivity, "Verification failed: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
         }
 

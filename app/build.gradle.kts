@@ -86,8 +86,5 @@ dependencies {
     implementation ("com.hbb20:ccp:2.5.3")
     implementation ("androidx.browser:browser:1.3.0")
     implementation ("com.github.dhaval2404:imagepicker:2.1")
-
-
-
 }
 
