@@ -19,16 +19,14 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.android.clustering.ClusterItem
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
-import java.util.Locale
-
+import java.util.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -37,7 +35,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val locationPermissionRequestCode = 1000
     private lateinit var clusterManager: ClusterManager<SportsPosting>
-
+    private val firestore by lazy { FirebaseFirestore.getInstance() }
+    private lateinit var auth: FirebaseAuth
 
     data class SportsPosting(
         val type: String,
@@ -54,7 +53,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         override fun getSnippet(): String? {
             return "Tap for details"
         }
-
     }
 
     private fun getIconForType(type: String): BitmapDescriptor {
@@ -84,7 +82,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -94,6 +91,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
+
+        auth = FirebaseAuth.getInstance()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -122,7 +121,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.uiSettings.isMyLocationButtonEnabled = true
 
             setupClusterManager()
-            addGameMarkers()
+            addGameMarkersFromFirestore()
 
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
@@ -133,24 +132,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun getSportsPostings(): List<SportsPosting> {
-        return listOf(
-            SportsPosting("Pickleball", LatLng(37.3341954, -121.8801998)),
-            SportsPosting("Spikeball", LatLng(37.334774, -121.883428)),
-            SportsPosting("Spikeball", LatLng(37.327838, -121.892740)),
-            SportsPosting("Soccer", LatLng(37.321568, -121.865880)),
-            SportsPosting("Tennis", LatLng(37.335107, -121.865930)),
-            SportsPosting("Soccer", LatLng(37.333621, -121.897648)),
-            SportsPosting("Tennis", LatLng(37.334548, -121.897828)),
-            SportsPosting("Baseball", LatLng(37.347458, -121.872388)),
-            SportsPosting("Soccer", LatLng(37.348693, -121.870857)),
-            SportsPosting("Basketball", LatLng(37.356830, -121.875342)),
-            SportsPosting("Soccer", LatLng(37.358983, -121.876360)),
-            SportsPosting("Golf", LatLng(37.377586, -121.889187)),
-            SportsPosting("Golf", LatLng(37.346729, -121.851398))
-        )
-    }
-
     private fun setupClusterManager() {
         // Initialize the ClusterManager
         clusterManager = ClusterManager<SportsPosting>(this, mMap)
@@ -158,7 +139,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Set a custom renderer that uses the custom icons defined in the SportsPosting class
         clusterManager.renderer = object : DefaultClusterRenderer<SportsPosting>(this, mMap, clusterManager) {
             override fun onBeforeClusterItemRendered(item: SportsPosting, markerOptions: MarkerOptions) {
-                // Use the getMarkerIcon method from the SportsPosting instance to set the marker icon
                 markerOptions.icon(getIconForType(item.type))
             }
         }
@@ -168,13 +148,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setOnMarkerClickListener(clusterManager)
     }
 
-    private fun addGameMarkers() {
-        val sportsPostings = getSportsPostings() // Assuming this function returns your postings
-        // Just add the items to the cluster manager
-        sportsPostings.forEach { posting ->
-            clusterManager.addItem(posting)
-        }
-        clusterManager.cluster() // Force a re-cluster
+    private fun addGameMarkersFromFirestore() {
+        firestore.collection("game_posts")
+            .get()
+            .addOnSuccessListener { documents ->
+                documents.forEach { document ->
+                    val type = document.getString("sportType") ?: "Unknown"
+                    val location = document.get("location") as? Map<String, Double>
+                    val latitude = location?.get("latitude") ?: 0.0
+                    val longitude = location?.get("longitude") ?: 0.0
+                    val posting = SportsPosting(type, LatLng(latitude, longitude))
+                    clusterManager.addItem(posting)
+                }
+                clusterManager.cluster() // Force a re-cluster
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(
+                    this,
+                    "Error loading game posts: ${exception.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
     }
 
     private fun setupBottomNavigationView() {
@@ -184,22 +178,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
-                    // Placeholder for Home
                     val intent = Intent(this, HomeActivity::class.java)
                     startActivity(intent)
                     true
                 }
                 R.id.navigation_messages -> {
-                    // Placeholder for Messages
                     Toast.makeText(this, "Messages feature under development", Toast.LENGTH_SHORT).show()
                     true
                 }
-                R.id.navigation_maps -> {
-                    // Already in Maps Activity, no action needed
-                    true
-                }
+                R.id.navigation_maps -> true // Already in Maps Activity
                 R.id.navigation_notifcations -> {
-                    // Placeholder for Notifications
                     Toast.makeText(this, "Notifications feature under development", Toast.LENGTH_SHORT).show()
                     true
                 }
@@ -207,8 +195,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        // Set the Maps item as selected
         bottomNavigationView.setSelectedItemId(R.id.navigation_maps)
     }
-
 }
