@@ -66,6 +66,11 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadGamePosts()
+    }
+
     private fun loadUserName(profileNameTextView: TextView) {
         val user: FirebaseUser? = auth.currentUser
 

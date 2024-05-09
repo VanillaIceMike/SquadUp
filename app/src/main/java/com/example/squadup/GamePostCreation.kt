@@ -4,11 +4,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -29,7 +25,6 @@ import java.util.*
 class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var auth: FirebaseAuth
-
     private lateinit var googleMap: GoogleMap
     private lateinit var marker: Marker
     private val defaultLocation = LatLng(37.3382, -121.8863)
@@ -85,18 +80,23 @@ class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
         marker = googleMap.addMarker(
             MarkerOptions()
                 .position(defaultLocation)
-                .draggable(true)
+                .draggable(true) // Ensure marker is draggable
                 .title("Drag to choose location")
         )!!
 
         // Move the camera to the default location
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 16f))
 
-        // Set a listener for marker drag events
+        // Disable map scrolling when dragging starts
         googleMap.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
-            override fun onMarkerDragStart(marker: Marker) {}
+            override fun onMarkerDragStart(marker: Marker) {
+                googleMap.uiSettings.isScrollGesturesEnabled = false
+            }
+
             override fun onMarkerDrag(marker: Marker) {}
+
             override fun onMarkerDragEnd(marker: Marker) {
+                googleMap.uiSettings.isScrollGesturesEnabled = true
                 Toast.makeText(
                     this@GamePostCreation,
                     "Location selected: ${marker.position.latitude}, ${marker.position.longitude}",
