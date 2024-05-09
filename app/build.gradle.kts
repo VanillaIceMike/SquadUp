@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.places)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -86,5 +87,8 @@ dependencies {
     implementation ("com.hbb20:ccp:2.5.3")
     implementation ("androidx.browser:browser:1.3.0")
     implementation ("com.github.dhaval2404:imagepicker:2.1")
+    implementation ("com.google.android.material:material:1.9.0")
+    implementation ("com.github.bumptech.glide:glide:4.15.1")
+    implementation ("com.github.bumptech.glide:compiler:4.15.1'")
 }
 

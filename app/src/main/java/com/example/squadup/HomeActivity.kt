@@ -3,6 +3,7 @@ package com.example.squadup
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -34,8 +35,7 @@ class HomeActivity : AppCompatActivity() {
         val profileNameTextView = findViewById<TextView>(R.id.user_name)
         val userProfileImageView = findViewById<ImageView>(R.id.user_profile_picture)
         val settingsIcon = findViewById<ImageView>(R.id.settings_icon)
-
-        // Load user profile information
+        val createPostButton: View = findViewById(R.id.fab_add_game_post)
 
         // Settings icon click listener
         settingsIcon.setOnClickListener {
@@ -43,7 +43,11 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Setup bottom navigation
+        createPostButton.setOnClickListener {
+            val intent = Intent(this, GamePostCreation::class.java)
+            startActivity(intent)
+        }
+
         setupBottomNavigationView()
         loadUserName(profileNameTextView)
         loadUserProfilePicture(userProfileImageView)
