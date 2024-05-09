@@ -66,17 +66,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Map snapshot -->
-            <FrameLayout
-                android:id="@+id/map_fragment_container"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_marginBottom="8dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/game_posts_recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="298dp"
+                android:layout_height="563dp"
                 android:layout_marginBottom="8dp"
                 android:nestedScrollingEnabled="false" />
         </LinearLayout>
