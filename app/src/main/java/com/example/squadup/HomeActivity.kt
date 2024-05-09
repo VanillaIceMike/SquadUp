@@ -11,14 +11,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.squadup.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private val firestore by lazy { FirebaseFirestore.getInstance() }
+    private lateinit var gamePostAdapter: GamePostAdapter
+    private val gamePosts = mutableListOf<GamePost>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -37,6 +43,11 @@ class HomeActivity : AppCompatActivity() {
         val settingsIcon = findViewById<ImageView>(R.id.settings_icon)
         val createPostButton: View = findViewById(R.id.fab_add_game_post)
 
+        val recyclerView = findViewById<RecyclerView>(R.id.game_posts_recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        gamePostAdapter = GamePostAdapter(this, gamePosts)
+        recyclerView.adapter = gamePostAdapter
+
         // Settings icon click listener
         settingsIcon.setOnClickListener {
             val intent = Intent(this, ProfileSetupActivity::class.java)
@@ -51,6 +62,7 @@ class HomeActivity : AppCompatActivity() {
         setupBottomNavigationView()
         loadUserName(profileNameTextView)
         loadUserProfilePicture(userProfileImageView)
+        loadGamePosts()
 
     }
 
@@ -79,6 +91,26 @@ class HomeActivity : AppCompatActivity() {
                 userProfileImageView.setImageResource(R.drawable.profile_pic_placeholder)
             }
         }
+    }
+
+    private fun loadGamePosts() {
+        firestore.collection("game_posts")
+            .get()
+            .addOnSuccessListener { documents ->
+                gamePosts.clear()
+                for (document in documents) {
+                    val gamePost = document.toObject(GamePost::class.java)
+                    gamePosts.add(gamePost)
+                }
+                gamePostAdapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(
+                    this,
+                    "Error loading game posts: ${exception.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
     }
 
     private fun setupBottomNavigationView() {
