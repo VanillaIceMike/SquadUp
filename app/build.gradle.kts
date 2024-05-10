@@ -89,5 +89,7 @@ dependencies {
     implementation ("com.github.dhaval2404:imagepicker:2.1")
     implementation ("com.google.android.material:material:1.9.0")
     implementation ("com.github.bumptech.glide:glide:4.15.1")
+    implementation ("com.google.android.material:material:1.3.0")
+
 }
 
