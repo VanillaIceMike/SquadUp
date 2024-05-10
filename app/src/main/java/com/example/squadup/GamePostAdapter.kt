@@ -1,6 +1,7 @@
 package com.example.squadup
 
 import android.content.Context
+import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
@@ -14,8 +15,10 @@ import com.bumptech.glide.Glide
 import java.io.IOException
 import java.util.*
 
-class GamePostAdapter(private val context: Context, private val gamePosts: List<GamePost>) :
-    RecyclerView.Adapter<GamePostAdapter.GamePostViewHolder>() {
+class GamePostAdapter(
+    private val context: Context,
+    private val gamePosts: List<GamePost>
+) : RecyclerView.Adapter<GamePostAdapter.GamePostViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GamePostViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.game_post_card, parent, false)
@@ -47,6 +50,13 @@ class GamePostAdapter(private val context: Context, private val gamePosts: List<
         } else {
             holder.userProfilePicImageView.setImageResource(R.drawable.profile_pic_placeholder)
         }
+
+        // Set click listener to open GamePostDetailsActivity
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, GamePostDetailsActivity::class.java)
+            intent.putExtra("POST_ID", gamePost.id) // Assuming GamePost has an `id` field
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int = gamePosts.size
@@ -74,4 +84,5 @@ class GamePostAdapter(private val context: Context, private val gamePosts: List<
         val userProfilePicImageView: ImageView = view.findViewById(R.id.post_user_profile_pic)
     }
 }
+
 

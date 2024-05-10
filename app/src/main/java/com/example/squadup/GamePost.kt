@@ -1,6 +1,7 @@
 package com.example.squadup
 
 data class GamePost(
+    val id: String = "",
     val sportType: String = "",
     val numPlayers: Int = 0,
     val timeframe: String = "",

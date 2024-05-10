@@ -1,6 +1,7 @@
 package com.example.squadup
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -39,6 +40,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var auth: FirebaseAuth
 
     data class SportsPosting(
+        val id: String,
         val type: String,
         val location: LatLng
     ) : ClusterItem {
@@ -74,8 +76,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun drawableToBitmap(drawableId: Int): BitmapDescriptor {
         val drawable = ContextCompat.getDrawable(this, drawableId)
-        val bitmap = Bitmap.createBitmap(drawable!!.intrinsicWidth,
-            drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(
+            drawable!!.intrinsicWidth,
+            drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+        )
         val canvas = Canvas(bitmap)
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
@@ -121,7 +125,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.uiSettings.isMyLocationButtonEnabled = true
 
             setupClusterManager()
-            addGameMarkersFromFirestore()
+            setupMarkersListener()
 
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
@@ -132,6 +136,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    @SuppressLint("PotentialBehaviorOverride")
     private fun setupClusterManager() {
         // Initialize the ClusterManager
         clusterManager = ClusterManager<SportsPosting>(this, mMap)
@@ -143,31 +148,44 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        // Set the map's listeners for the cluster manager
+        // Set listeners for cluster manager
         mMap.setOnCameraIdleListener(clusterManager)
         mMap.setOnMarkerClickListener(clusterManager)
+
+        clusterManager.setOnClusterItemClickListener { sportsPosting ->
+            val intent = Intent(this, GamePostDetailsActivity::class.java)
+            intent.putExtra("POST_ID", sportsPosting.id)
+            startActivity(intent)
+            true
+        }
     }
 
-    private fun addGameMarkersFromFirestore() {
+    private fun setupMarkersListener() {
         firestore.collection("game_posts")
-            .get()
-            .addOnSuccessListener { documents ->
-                documents.forEach { document ->
-                    val type = document.getString("sportType") ?: "Unknown"
+            .addSnapshotListener { snapshots, exception ->
+                if (exception != null) {
+                    Toast.makeText(
+                        this,
+                        "Error loading game posts: ${exception.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@addSnapshotListener
+                }
+
+                clusterManager.clearItems()
+
+                snapshots?.documents?.forEach { document ->
+                    val id = document.id
+                    val type = document.getString("sportType")?.lowercase(Locale.ROOT) ?: "unknown"
                     val location = document.get("location") as? Map<String, Double>
                     val latitude = location?.get("latitude") ?: 0.0
                     val longitude = location?.get("longitude") ?: 0.0
-                    val posting = SportsPosting(type, LatLng(latitude, longitude))
+                    val posting = SportsPosting(id, type, LatLng(latitude, longitude))
+
                     clusterManager.addItem(posting)
                 }
+
                 clusterManager.cluster() // Force a re-cluster
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(
-                    this,
-                    "Error loading game posts: ${exception.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
     }
 

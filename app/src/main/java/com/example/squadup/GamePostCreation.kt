@@ -85,7 +85,7 @@ class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
         )!!
 
         // Move the camera to the default location
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 16f))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 15f))
 
         // Disable map scrolling when dragging starts
         googleMap.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {

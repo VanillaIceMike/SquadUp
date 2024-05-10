@@ -13,11 +13,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.squadup.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 
 class HomeActivity : AppCompatActivity() {
 
@@ -25,6 +26,8 @@ class HomeActivity : AppCompatActivity() {
     private val firestore by lazy { FirebaseFirestore.getInstance() }
     private lateinit var gamePostAdapter: GamePostAdapter
     private val gamePosts = mutableListOf<GamePost>()
+    private var listenerRegistration: ListenerRegistration? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -62,13 +65,7 @@ class HomeActivity : AppCompatActivity() {
         setupBottomNavigationView()
         loadUserName(profileNameTextView)
         loadUserProfilePicture(userProfileImageView)
-        loadGamePosts()
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        loadGamePosts()
+        setupGamePostsListener()
     }
 
     private fun loadUserName(profileNameTextView: TextView) {
@@ -98,24 +95,45 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadGamePosts() {
-        firestore.collection("game_posts")
-            .get()
-            .addOnSuccessListener { documents ->
-                gamePosts.clear()
-                for (document in documents) {
-                    val gamePost = document.toObject(GamePost::class.java)
-                    gamePosts.add(gamePost)
+    private fun setupGamePostsListener() {
+        listenerRegistration = firestore.collection("game_posts")
+            .addSnapshotListener { snapshots, exception ->
+                if (exception != null) {
+                    Toast.makeText(
+                        this,
+                        "Error loading game posts: ${exception.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@addSnapshotListener
                 }
+
+                snapshots?.documentChanges?.forEach { change ->
+                    val gamePost = change.document.toObject(GamePost::class.java).copy(id = change.document.id)
+
+                    when (change.type) {
+                        DocumentChange.Type.ADDED -> gamePosts.add(gamePost)
+                        DocumentChange.Type.MODIFIED -> {
+                            val index = gamePosts.indexOfFirst { it.id == gamePost.id }
+                            if (index != -1) {
+                                gamePosts[index] = gamePost
+                            }
+                        }
+                        DocumentChange.Type.REMOVED -> {
+                            val index = gamePosts.indexOfFirst { it.id == gamePost.id }
+                            if (index != -1) {
+                                gamePosts.removeAt(index)
+                            }
+                        }
+                    }
+                }
+
                 gamePostAdapter.notifyDataSetChanged()
             }
-            .addOnFailureListener { exception ->
-                Toast.makeText(
-                    this,
-                    "Error loading game posts: ${exception.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        listenerRegistration?.remove()
     }
 
     private fun setupBottomNavigationView() {
@@ -148,3 +166,4 @@ class HomeActivity : AppCompatActivity() {
         bottomNavigationView.setSelectedItemId(R.id.navigation_home)
     }
 }
+
