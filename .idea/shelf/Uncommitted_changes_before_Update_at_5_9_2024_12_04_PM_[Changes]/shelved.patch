@@ -1,0 +1,112 @@
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\">\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.CAMERA\"/>\r\n    <uses-feature android:name=\"android.hardware.camera.any\"/>\r\n\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n        android:fullBackupContent=\"@xml/backup_rules\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.SquadUp\"\r\n        tools:targetApi=\"31\">\r\n        <activity\r\n            android:name=\".ProfileSetupActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".CodeVerificationActivity2\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".HomeActivity\"\r\n            android:exported=\"false\" />\r\n\r\n        <meta-data\r\n            android:name=\"com.google.android.geo.API_KEY\"\r\n            android:value=\"AIzaSyDGrtAG2j_aGeo3suM6Q8aGyqMUhEARalM\" />\r\n\r\n        <activity\r\n            android:name=\".SplashActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n\r\n            <meta-data\r\n                android:name=\"android.app.lib_name\"\r\n                android:value=\"\" />\r\n        </activity>\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:exported=\"false\">\r\n            <meta-data\r\n                android:name=\"android.app.lib_name\"\r\n                android:value=\"\" />\r\n        </activity>\r\n        <activity\r\n            android:name=\".MapsActivity\"\r\n            android:exported=\"false\"\r\n            android:label=\"@string/title_activity_maps\" />\r\n        <activity\r\n            android:name=\".SignUpActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".SignInActivity\"\r\n            android:exported=\"false\" />\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision 9db2affa2e94153827d3863ba391920c000bf7a4)
++++ b/app/src/main/AndroidManifest.xml	(date 1715216749505)
+@@ -5,10 +5,9 @@
+     <uses-permission android:name="android.permission.INTERNET" />
+     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+-    <uses-permission android:name="android.permission.CAMERA"/>
+-    <uses-feature android:name="android.hardware.camera.any"/>
++    <uses-permission android:name="android.permission.CAMERA" />
++    <uses-feature android:name="android.hardware.camera.any" />
+ 
+-
+     <application
+         android:allowBackup="true"
+         android:dataExtractionRules="@xml/data_extraction_rules"
+Index: app/src/main/java/com/example/squadup/HomeActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.squadup\r\n\r\nimport android.content.Intent\r\nimport android.net.Uri\r\nimport android.os.Bundle\r\nimport android.widget.ImageView\r\nimport android.widget.TextView\r\nimport android.widget.Toast\r\nimport androidx.activity.enableEdgeToEdge\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.core.view.ViewCompat\r\nimport androidx.core.view.WindowInsetsCompat\r\nimport com.example.squadup.R\r\nimport com.google.android.material.bottomnavigation.BottomNavigationView\r\nimport com.google.firebase.auth.FirebaseAuth\r\nimport com.google.firebase.auth.FirebaseUser\r\n\r\nclass HomeActivity : AppCompatActivity() {\r\n\r\n    private lateinit var auth: FirebaseAuth\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        enableEdgeToEdge()\r\n        setContentView(R.layout.activity_home)\r\n\r\n        auth = FirebaseAuth.getInstance()\r\n\r\n        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->\r\n            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)\r\n            insets\r\n        }\r\n\r\n        val profileNameTextView = findViewById<TextView>(R.id.user_name)\r\n        val userProfileImageView = findViewById<ImageView>(R.id.user_profile_picture)\r\n        val settingsIcon = findViewById<ImageView>(R.id.settings_icon)\r\n\r\n        // Load user profile information\r\n\r\n        // Settings icon click listener\r\n        settingsIcon.setOnClickListener {\r\n            val intent = Intent(this, ProfileSetupActivity::class.java)\r\n            startActivity(intent)\r\n        }\r\n\r\n        // Setup bottom navigation\r\n        setupBottomNavigationView()\r\n        loadUserName(profileNameTextView)\r\n        loadUserProfilePicture(userProfileImageView)\r\n\r\n    }\r\n\r\n    private fun loadUserName(profileNameTextView: TextView) {\r\n        val user: FirebaseUser? = auth.currentUser\r\n\r\n        // If the user is authenticated\r\n        user?.let {\r\n            profileNameTextView.text = it.displayName ?: \"Anonymous\"\r\n        } ?: run {\r\n            // Fallback if the user is not logged in\r\n            profileNameTextView.text = \"Guest\"\r\n        }\r\n    }\r\n\r\n    private fun loadUserProfilePicture(userProfileImageView: ImageView) {\r\n        val user: FirebaseUser? = auth.currentUser\r\n\r\n        // If the user is authenticated\r\n        user?.let {\r\n            val profilePictureUri: Uri? = it.photoUrl\r\n\r\n            if (profilePictureUri != null) {\r\n                userProfileImageView.setImageURI(profilePictureUri)\r\n            } else {\r\n                userProfileImageView.setImageResource(R.drawable.profile_pic_placeholder)\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun setupBottomNavigationView() {\r\n        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)\r\n\r\n        // Listener for item selection in the BottomNavigationView\r\n        bottomNavigationView.setOnItemSelectedListener { item ->\r\n            when (item.itemId) {\r\n                R.id.navigation_home -> {\r\n                    true\r\n                }\r\n                R.id.navigation_messages -> {\r\n                    true\r\n                }\r\n                R.id.navigation_maps -> {\r\n                    val intent = Intent(this, MapsActivity::class.java)\r\n                    startActivity(intent)\r\n                    true\r\n                }\r\n                R.id.navigation_notifcations -> {\r\n                    // Placeholder for Notifications\r\n                    Toast.makeText(this, \"Notifications feature under development\", Toast.LENGTH_SHORT).show()\r\n                    true\r\n                }\r\n                else -> false\r\n            }\r\n        }\r\n\r\n        // Set the Maps item as selected\r\n        bottomNavigationView.setSelectedItemId(R.id.navigation_home)\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/squadup/HomeActivity.kt b/app/src/main/java/com/example/squadup/HomeActivity.kt
+--- a/app/src/main/java/com/example/squadup/HomeActivity.kt	(revision 9db2affa2e94153827d3863ba391920c000bf7a4)
++++ b/app/src/main/java/com/example/squadup/HomeActivity.kt	(date 1715216483191)
+@@ -3,6 +3,7 @@
+ import android.content.Intent
+ import android.net.Uri
+ import android.os.Bundle
++import android.widget.Button
+ import android.widget.ImageView
+ import android.widget.TextView
+ import android.widget.Toast
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.android.application)\r\n    alias(libs.plugins.jetbrains.kotlin.android)\r\n    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)\r\n    alias(libs.plugins.google.gms.google.services)\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.example.squadup\"\r\n    compileSdk = 34\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.example.squadup\"\r\n        minSdk = 24\r\n        targetSdk = 34\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n        vectorDrawables {\r\n            useSupportLibrary = true\r\n        }\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_1_8\r\n        targetCompatibility = JavaVersion.VERSION_1_8\r\n    }\r\n    kotlinOptions {\r\n        jvmTarget = \"1.8\"\r\n    }\r\n    buildFeatures {\r\n        compose = true\r\n        viewBinding = true\r\n        dataBinding = true\r\n    }\r\n    composeOptions {\r\n        kotlinCompilerExtensionVersion = \"1.5.1\"\r\n    }\r\n    packaging {\r\n        resources {\r\n            excludes += \"/META-INF/{AL2.0,LGPL2.1}\"\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n\r\n    implementation(platform(\"com.google.firebase:firebase-bom:30.3.1\"))\r\n    implementation(libs.androidx.core.ktx)\r\n    implementation(libs.androidx.lifecycle.runtime.ktx)\r\n    implementation(libs.androidx.activity.compose)\r\n    implementation(\"androidx.activity:activity-compose:1.9.0\")\r\n    implementation(platform(libs.androidx.compose.bom))\r\n    implementation(libs.androidx.ui)\r\n    implementation(libs.androidx.ui.graphics)\r\n    implementation(libs.androidx.ui.tooling.preview)\r\n    implementation(libs.androidx.material3)\r\n    implementation(libs.androidx.appcompat)\r\n    implementation(libs.material)\r\n    implementation(libs.androidx.activity)\r\n    implementation(libs.androidx.constraintlayout)\r\n    implementation(libs.play.services.maps)\r\n    implementation(libs.places)\r\n    implementation(libs.firebase.auth)\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.androidx.junit)\r\n    androidTestImplementation(libs.androidx.espresso.core)\r\n    androidTestImplementation(platform(libs.androidx.compose.bom))\r\n    androidTestImplementation(libs.androidx.ui.test.junit4)\r\n    debugImplementation(libs.androidx.ui.tooling)\r\n    debugImplementation(libs.androidx.ui.test.manifest)\r\n    implementation(\"com.airbnb.android:lottie:6.4.0\")\r\n    implementation(libs.google.maps.utils)\r\n    implementation (\"com.google.android.material:material:1.10.0\")\r\n    implementation (\"com.hbb20:ccp:2.5.3\")\r\n    implementation (\"androidx.browser:browser:1.3.0\")\r\n    implementation (\"com.github.dhaval2404:imagepicker:2.1\")\r\n\r\n\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision 9db2affa2e94153827d3863ba391920c000bf7a4)
++++ b/app/build.gradle.kts	(date 1715216858356)
+@@ -89,5 +89,6 @@
+ 
+ 
+ 
++
+ }
+ 
+Index: app/src/main/java/com/example/squadup/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.squadup\r\n\r\nimport android.os.Bundle\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport android.content.Intent\r\nimport android.widget.Button\r\nimport androidx.activity.enableEdgeToEdge\r\n\r\nclass MainActivity : AppCompatActivity() {\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        enableEdgeToEdge()\r\n        setContentView(R.layout.activity_main)\r\n\r\n        // Assuming you have a button or some interaction in MainActivity\r\n        // that leads to SignInActivity. If you don't, you need to add one in your XML.\r\n        val signInButton: Button = findViewById(R.id.signInButton)\r\n        signInButton.setOnClickListener {\r\n            val intent = Intent(this, SignInActivity::class.java)\r\n            startActivity(intent)\r\n        }\r\n\r\n        // Similarly, if there's a sign-up interaction.\r\n        val signUpButton: Button = findViewById(R.id.signUpButton)\r\n        signUpButton.setOnClickListener {\r\n            val intent = Intent(this, SignUpActivity::class.java)\r\n            startActivity(intent)\r\n        }\r\n\r\n        val bypass: Button = findViewById(R.id.bypassButton)\r\n        bypass.setOnClickListener {\r\n            val intent = Intent(this, ProfileSetupActivity::class.java)\r\n            startActivity(intent)\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/squadup/MainActivity.kt b/app/src/main/java/com/example/squadup/MainActivity.kt
+--- a/app/src/main/java/com/example/squadup/MainActivity.kt	(revision 9db2affa2e94153827d3863ba391920c000bf7a4)
++++ b/app/src/main/java/com/example/squadup/MainActivity.kt	(date 1715208222931)
+@@ -32,5 +32,6 @@
+             val intent = Intent(this, ProfileSetupActivity::class.java)
+             startActivity(intent)
+         }
++
+     }
+ }
+Index: app/src/main/res/layout/activity_home.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/main\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".HomeActivity\">\r\n\r\n    <!-- Top bar with user profile and settings -->\r\n    <RelativeLayout\r\n        android:id=\"@+id/top_bar\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_alignParentTop=\"true\"\r\n        android:padding=\"16dp\"\r\n        android:background=\"@android:color/white\">\r\n\r\n        <!-- User Profile Picture -->\r\n        <ImageView\r\n            android:id=\"@+id/user_profile_picture\"\r\n            android:layout_width=\"58dp\"\r\n            android:layout_height=\"58dp\"\r\n            android:src=\"@drawable/profile_pic_placeholder\"\r\n            android:scaleType=\"centerCrop\"\r\n            android:layout_alignParentStart=\"true\"\r\n            android:layout_centerVertical=\"true\"\r\n            android:contentDescription=\"user_profile_picture\" />\r\n\r\n        <!-- User Name -->\r\n        <TextView\r\n            android:id=\"@+id/user_name\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_toEndOf=\"@id/user_profile_picture\"\r\n            android:layout_marginStart=\"8dp\"\r\n            android:text=\"User Name\"\r\n            android:textSize=\"18sp\"\r\n            android:textStyle=\"bold\"\r\n            android:layout_centerVertical=\"true\" />\r\n\r\n        <!-- Settings Icon -->\r\n        <ImageView\r\n            android:id=\"@+id/settings_icon\"\r\n            android:layout_width=\"58dp\"\r\n            android:layout_height=\"58dp\"\r\n            android:src=\"@drawable/settings_icon\"\r\n            android:layout_alignParentEnd=\"true\"\r\n            android:layout_centerVertical=\"true\"\r\n            android:contentDescription=\"settings_icon\"\r\n            android:layout_marginStart=\"8dp\"\r\n            android:layout_marginEnd=\"8dp\"\r\n            android:clickable=\"true\"\r\n            android:focusable=\"true\" />\r\n    </RelativeLayout>\r\n\r\n    <!-- Bottom Navigation -->\r\n    <com.google.android.material.bottomnavigation.BottomNavigationView\r\n        android:id=\"@+id/bottom_navigation\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:background=\"@android:color/white\"\r\n        android:layout_alignParentBottom=\"true\"\r\n        app:menu=\"@menu/navigation_menu\" />\r\n\r\n</RelativeLayout>\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_home.xml b/app/src/main/res/layout/activity_home.xml
+--- a/app/src/main/res/layout/activity_home.xml	(revision 9db2affa2e94153827d3863ba391920c000bf7a4)
++++ b/app/src/main/res/layout/activity_home.xml	(date 1715216411010)
+@@ -53,6 +53,8 @@
+             android:focusable="true" />
+     </RelativeLayout>
+ 
++
++
+     <!-- Bottom Navigation -->
+     <com.google.android.material.bottomnavigation.BottomNavigationView
+         android:id="@+id/bottom_navigation"
+Index: app/google-services.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n  \"project_info\": {\r\n    \"project_number\": \"616147744231\",\r\n    \"project_id\": \"squadup-646f3\",\r\n    \"storage_bucket\": \"squadup-646f3.appspot.com\"\r\n  },\r\n  \"client\": [\r\n    {\r\n      \"client_info\": {\r\n        \"mobilesdk_app_id\": \"1:616147744231:android:b136d22b52002bfdc97942\",\r\n        \"android_client_info\": {\r\n          \"package_name\": \"com.example.squadup\"\r\n        }\r\n      },\r\n      \"oauth_client\": [],\r\n      \"api_key\": [\r\n        {\r\n          \"current_key\": \"AIzaSyCZX-55H9hYhYQIMjSn7zwYaoD_ppaPNG8\"\r\n        }\r\n      ],\r\n      \"services\": {\r\n        \"appinvite_service\": {\r\n          \"other_platform_oauth_client\": []\r\n        }\r\n      }\r\n    }\r\n  ],\r\n  \"configuration_version\": \"1\"\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/google-services.json b/app/google-services.json
+--- a/app/google-services.json	(revision 9db2affa2e94153827d3863ba391920c000bf7a4)
++++ b/app/google-services.json	(date 1715218567573)
+@@ -1,6 +1,7 @@
+ {
+   "project_info": {
+     "project_number": "616147744231",
++    "firebase_url": "https://squadup-646f3-default-rtdb.firebaseio.com",
+     "project_id": "squadup-646f3",
+     "storage_bucket": "squadup-646f3.appspot.com"
+   },
