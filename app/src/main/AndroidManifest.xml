@@ -21,6 +21,9 @@
         android:theme="@style/Theme.SquadUp"
         tools:targetApi="31">
         <activity
+            android:name=".GamePostPopup"
+            android:exported="false" />
+        <activity
             android:name=".GamePostDetailsActivity"
             android:exported="false" />
         <activity

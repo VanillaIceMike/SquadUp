@@ -1,17 +1,19 @@
-package com.example.squadup
-
 import android.content.Context
-import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.squadup.GamePost
+import com.example.squadup.GamePostPopup
+import com.example.squadup.R
 import java.io.IOException
 import java.util.*
 
@@ -35,7 +37,8 @@ class GamePostAdapter(
         val location = gamePost.location
         val latitude = location["latitude"] ?: 0.0
         val longitude = location["longitude"] ?: 0.0
-        holder.locationTextView.text = getAddressFromCoordinates(latitude, longitude)
+        val address = getAddressFromCoordinates(latitude, longitude)  // Converting to address
+        holder.locationTextView.text = address
 
         val userInfo = gamePost.userInfo
         holder.userNameTextView.text = userInfo["displayName"] ?: "Anonymous"
@@ -51,11 +54,22 @@ class GamePostAdapter(
             holder.userProfilePicImageView.setImageResource(R.drawable.profile_pic_placeholder)
         }
 
-        // Set click listener to open GamePostDetailsActivity
+        // Set click listener to open GamePostDetailsDialogFragment
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, GamePostDetailsActivity::class.java)
-            intent.putExtra("POST_ID", gamePost.id) // Assuming GamePost has an `id` field
-            context.startActivity(intent)
+            val dialog = GamePostPopup().apply {
+                arguments = Bundle().apply {
+                    putString("POST_ID", gamePost.id)
+                    putString("sportType", gamePost.sportType)
+                    putString("numPlayers", gamePost.numPlayers.toString())
+                    putString("timeframe", gamePost.timeframe)
+                    putString("authorName", userInfo["displayName"])
+                    putString("authorImageUrl", profilePicUri)
+                    putString("address", address)  // Passing address to dialog
+                    putDouble("latitude", latitude)
+                    putDouble("longitude", longitude)
+                }
+            }
+            dialog.show((context as FragmentActivity).supportFragmentManager, "GamePostDetails")
         }
     }
 
@@ -84,5 +98,6 @@ class GamePostAdapter(
         val userProfilePicImageView: ImageView = view.findViewById(R.id.post_user_profile_pic)
     }
 }
+
 
 

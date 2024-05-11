@@ -153,10 +153,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setOnMarkerClickListener(clusterManager)
 
         clusterManager.setOnClusterItemClickListener { sportsPosting ->
-            val intent = Intent(this, GamePostDetailsActivity::class.java)
-            intent.putExtra("POST_ID", sportsPosting.id)
-            startActivity(intent)
-            true
+            val dialog = GamePostPopup().apply {
+                arguments = Bundle().apply {
+                    putString("POST_ID", sportsPosting.id)  // Pass any other necessary data here
+                }
+            }
+            dialog.show(supportFragmentManager, "GamePostPopup")
+            true  // Return true to indicate that we've handled the event
         }
     }
 
