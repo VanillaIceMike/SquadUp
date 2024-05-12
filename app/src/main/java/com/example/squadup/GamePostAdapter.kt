@@ -33,6 +33,7 @@ class GamePostAdapter(
         holder.sportTypeTextView.text = gamePost.sportType
         holder.numPlayersTextView.text = "Players: ${gamePost.numPlayers}"
         holder.timeframeTextView.text = "Timeframe: ${gamePost.timeframe}"
+        holder.numPlayersResponded.text = "Players Responded: ${gamePost.numPlayersResponded}"
 
         val location = gamePost.location
         val latitude = location["latitude"] ?: 0.0
@@ -61,6 +62,7 @@ class GamePostAdapter(
                     putString("POST_ID", gamePost.id)
                     putString("sportType", gamePost.sportType)
                     putString("numPlayers", gamePost.numPlayers.toString())
+                    putString("numPlayersResponded", gamePost.numPlayersResponded.toString())
                     putString("timeframe", gamePost.timeframe)
                     putString("authorName", userInfo["displayName"])
                     putString("authorImageUrl", profilePicUri)
@@ -92,6 +94,7 @@ class GamePostAdapter(
     class GamePostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val sportTypeTextView: TextView = view.findViewById(R.id.post_sport_type)
         val numPlayersTextView: TextView = view.findViewById(R.id.post_num_players)
+        val numPlayersResponded : TextView = view.findViewById(R.id.text_view_num_responded)
         val timeframeTextView: TextView = view.findViewById(R.id.post_timeframe)
         val locationTextView: TextView = view.findViewById(R.id.post_location)
         val userNameTextView: TextView = view.findViewById(R.id.post_user_name)

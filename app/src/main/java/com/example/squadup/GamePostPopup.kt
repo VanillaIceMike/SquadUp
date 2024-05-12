@@ -23,6 +23,7 @@ class GamePostPopup : DialogFragment(), OnMapReadyCallback {
     private lateinit var googleMap: GoogleMap
     private lateinit var sportTypeTextView: TextView
     private lateinit var numPlayersTextView: TextView
+    private lateinit var numPlayersRespondedTextView: TextView
     private lateinit var timeframeTextView: TextView
     private lateinit var authorImageView: ImageView
     private lateinit var authorNameTextView: TextView
@@ -37,6 +38,7 @@ class GamePostPopup : DialogFragment(), OnMapReadyCallback {
         val view = inflater.inflate(R.layout.activity_game_post_popup, container, false)
         sportTypeTextView = view.findViewById(R.id.text_view_sport_type)
         numPlayersTextView = view.findViewById(R.id.text_view_num_players)
+        numPlayersRespondedTextView = view.findViewById(R.id.text_view_num_responded)
         timeframeTextView = view.findViewById(R.id.text_view_timeframe)
         authorImageView = view.findViewById(R.id.image_view_author)
         authorNameTextView = view.findViewById(R.id.text_view_author_name)
@@ -69,6 +71,8 @@ class GamePostPopup : DialogFragment(), OnMapReadyCallback {
                     val numPlayers = document.getLong("numPlayers") ?: 0
                     numPlayersTextView.text = "Players Wanted: $numPlayers"
                     timeframeTextView.text = document.getString("timeframe") ?: "Unknown"
+                    val numPlayerResponded = document.getLong("numPlayersResponded") ?: 0
+                    numPlayersRespondedTextView.text = "Players Responded: $numPlayerResponded"
                     val location = document.get("location") as? Map<String, Double>
                     val latitude = location?.get("latitude") ?: 0.0
                     val longitude = location?.get("longitude") ?: 0.0
@@ -94,21 +98,23 @@ class GamePostPopup : DialogFragment(), OnMapReadyCallback {
     }
 
     private fun updatePlayersCount(postId: String) {
-        val docRef = firestore.collection("game_posts").document(postId)
+        val postRef = firestore.collection("game_posts").document(postId)
         firestore.runTransaction { transaction ->
-            val snapshot = transaction.get(docRef)
-            val currentPlayers = snapshot.getLong("numPlayers") ?: 0
-            if (currentPlayers > 0) {
-                transaction.update(docRef, "numPlayers", currentPlayers - 1)
-                Toast.makeText(context, "You have responded to the game post!", Toast.LENGTH_SHORT).show()
-                loadGamePostDetails(postId)  // Reload details to show updated player count
+            val snapshot = transaction.get(postRef)
+            val currentNumPlayers = snapshot.getLong("numPlayers") ?: 0
+            val currentPlayersResponded = snapshot.getLong("numPlayersResponded") ?: 0
+
+            if (currentNumPlayers > 0) {  // Only allow responding if there are players needed
+                transaction.update(postRef, "numPlayers", currentNumPlayers - 1)
+                transaction.update(postRef, "numPlayersResponded", currentPlayersResponded + 1)
             } else {
-                throw IllegalStateException("No players available to respond.")
+                throw IllegalStateException("No more players needed for this game post.")
             }
+        }.addOnSuccessListener {
+            Toast.makeText(context, "Thanks for responding. Player count updated!", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener { e ->
+            Toast.makeText(context, "Failed to respond to post: ${e.message}", Toast.LENGTH_LONG).show()
         }
-            .addOnFailureListener { exception ->
-                Toast.makeText(context, "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
-            }
     }
 
     override fun onMapReady(map: GoogleMap) {

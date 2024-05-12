@@ -139,6 +139,7 @@ class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
         val newGamePost = hashMapOf(
             "sportType" to sportType,
             "numPlayers" to numPlayers,
+            "numPlayersResponded" to 0,
             "timeframe" to timeframe,
             "location" to mapOf(
                 "latitude" to marker.position.latitude,

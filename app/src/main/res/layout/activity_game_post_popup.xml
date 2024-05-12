@@ -47,12 +47,21 @@
                 android:contentDescription="number_of_players" />
 
             <TextView
+                android:id="@+id/text_view_num_responded"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Players Responded"
+                android:textSize="14sp"
+                android:contentDescription="number_of_players_responded" />
+
+            <TextView
                 android:id="@+id/text_view_timeframe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Timeframe"
                 android:textSize="14sp"
                 android:contentDescription="timeframe" />
+
         </LinearLayout>
 
         <!-- Author Section -->
