@@ -98,11 +98,6 @@ class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
 
             override fun onMarkerDragEnd(marker: Marker) {
                 googleMap.uiSettings.isScrollGesturesEnabled = true
-                Toast.makeText(
-                    this@GamePostCreation,
-                    "Location selected: ${marker.position.latitude}, ${marker.position.longitude}",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         })
     }
@@ -155,7 +150,7 @@ class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
                 val documentId = documentReference.id
                 Toast.makeText(
                     this,
-                    "Game post added successfully with ID: $documentId",
+                    "Game post added successfully",
                     Toast.LENGTH_SHORT
                 ).show()
                 finish() // Go back to the previous activity

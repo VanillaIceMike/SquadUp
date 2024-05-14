@@ -71,6 +71,7 @@ class GamePostPopup : DialogFragment(), OnMapReadyCallback {
             .addOnSuccessListener { document ->
                 if (document != null) {
                     sportTypeTextView.text = document.getString("sportType") ?: "Unknown"
+
                     val numPlayers = document.getLong("numPlayers") ?: 0
                     numPlayersTextView.text = "Players Wanted: $numPlayers"
                     timeframeTextView.text = document.getString("timeframe") ?: "Unknown"
@@ -92,11 +93,11 @@ class GamePostPopup : DialogFragment(), OnMapReadyCallback {
                         authorImageView.setImageResource(R.drawable.profile_pic_placeholder)
                     }
                 } else {
-                    Toast.makeText(context, "Game post not found.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Game post not found.", Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(context, "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -114,9 +115,13 @@ class GamePostPopup : DialogFragment(), OnMapReadyCallback {
                 throw IllegalStateException("No more players needed for this game post.")
             }
         }.addOnSuccessListener {
-            Toast.makeText(context, "Thanks for responding. Player count updated!", Toast.LENGTH_SHORT).show()
+            if (isAdded) {
+                Toast.makeText(requireContext(), "Thanks for responding. Player count updated!", Toast.LENGTH_SHORT).show()
+            }
         }.addOnFailureListener { e ->
-            Toast.makeText(context, "Failed to respond to post: ${e.message}", Toast.LENGTH_LONG).show()
+            if (isAdded) {
+                Toast.makeText(requireContext(), "Failed to respond to post: ${e.message}", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
