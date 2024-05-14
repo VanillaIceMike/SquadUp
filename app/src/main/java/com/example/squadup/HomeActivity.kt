@@ -53,7 +53,11 @@ class HomeActivity : AppCompatActivity() {
         recyclerView.adapter = gamePostAdapter
 
         // Settings icon click listener
-        settingsIcon.setOnClickListener {
+        /*settingsIcon.setOnClickListener {
+            val intent = Intent(this, ProfileSetupActivity::class.java)
+            startActivity(intent)
+        }*/
+        profileNameTextView.setOnClickListener {
             val intent = Intent(this, ProfileSetupActivity::class.java)
             startActivity(intent)
         }
