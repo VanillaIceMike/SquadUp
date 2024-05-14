@@ -180,28 +180,32 @@ class HomeActivity : AppCompatActivity(){
     private fun setupBottomNavigationView() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-        // Listener for item selection in the BottomNavigationView
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
+                    // Stay in HomeActivity
                     true
                 }
                 R.id.navigation_addPost -> {
-                    val intent = Intent(this, GamePostCreation::class.java)
+                    val intent = Intent(this, GamePostCreation::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    }
                     startActivity(intent)
                     true
                 }
                 R.id.navigation_notifcations -> {
-                    // Placeholder for Notifications
-                    Toast.makeText(this, "Notifications feature under development", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, NotificationsDisplayActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    }
+                    startActivity(intent)
                     true
                 }
                 else -> false
             }
         }
 
-        // Set the Maps item as selected
-        bottomNavigationView.setSelectedItemId(R.id.navigation_home)
+        // Set the Home item as selected
+        bottomNavigationView.selectedItemId = R.id.navigation_home
     }
 
 }

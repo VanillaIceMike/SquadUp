@@ -46,7 +46,6 @@ class GamePostPopup : DialogFragment(), OnMapReadyCallback {
         declineButton = view.findViewById(R.id.button_decline)
 
         postId = arguments?.getString("POST_ID")
-        Toast.makeText(context, "Opening post: $postId", Toast.LENGTH_SHORT).show()
 
 
         respondButton.setOnClickListener {
