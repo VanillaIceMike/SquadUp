@@ -36,7 +36,7 @@ class ProfileSetupActivity : AppCompatActivity() {
         imageViewProfile = findViewById(R.id.image_profile)
         val buttonTakePhoto = findViewById<Button>(R.id.button_take_photo)
         val buttonChooseImage = findViewById<Button>(R.id.button_choose_image)
-        val buttonSkip = findViewById<Button>(R.id.button_skip)
+        val backButton = findViewById<ImageView>(R.id.back_butt)
 
         loadExistingProfilePicture()
 
@@ -59,7 +59,7 @@ class ProfileSetupActivity : AppCompatActivity() {
         }
 
 
-        buttonSkip.setOnClickListener { finish() }
+        backButton.setOnClickListener { finish() }
 
     }
 

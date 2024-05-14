@@ -59,6 +59,11 @@ class HomeActivity : AppCompatActivity(){
         gamePostAdapter = GamePostAdapter(this, gamePosts)
         recyclerView.adapter = gamePostAdapter
 
+        profileNameTextView.setOnClickListener {
+            val intent = Intent(this, ProfileSetupActivity::class.java)
+            startActivity(intent)
+        }
+
         setupBottomNavigationView()
         loadUserName(profileNameTextView)
         loadUserProfilePicture(userProfileImageView)
