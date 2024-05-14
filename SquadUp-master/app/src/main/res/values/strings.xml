@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">SquadUp</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+    <string name="welcome_to_squad_up">Welcome to Squad Up!</string>
+    <string name="username">Username</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="type_your_email">Type your Email</string>
+    <string name="type_your_password">Type Your Password</string>
+    <string name="retype_your_password">Retype Your Password</string>
+    <string name="already_registered_sign_in">Already Registered , Sign In !</string>
+</resources>
