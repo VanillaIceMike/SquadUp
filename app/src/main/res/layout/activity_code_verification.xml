@@ -13,21 +13,18 @@
         android:inputType="numberDecimal"
         android:minHeight="48dp" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/verifyBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Verify"
-        android:background="@drawable/rounded_button"
         android:layout_marginTop="16dp"/>
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/backBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Back"
-        android:background="@drawable/rounded_button"
         android:layout_marginTop="16dp"/>
-
 
 </LinearLayout>

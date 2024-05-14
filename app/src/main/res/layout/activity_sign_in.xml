@@ -56,33 +56,29 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/signInButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="24dp"
-        android:background="@drawable/rounded_button"
+        android:background="@color/purple_700"
         android:text="Sign In"
-        android:textColor="#FFFFFF"
+        android:textColor="#0288D1"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/passwordLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/forgotPasswordButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Forgot Password"
-        android:background="@drawable/rounded_button"
-        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/signInButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
-
 
     <TextView
         android:id="@+id/textView"
@@ -90,10 +86,11 @@
         android:layout_height="wrap_content"
         android:text="Not Registered Yet, Sign Up!"
         android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/forgotPasswordButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="32dp" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

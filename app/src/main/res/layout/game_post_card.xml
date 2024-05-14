@@ -34,13 +34,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Players: 0" />
-            <TextView
-                android:id="@+id/text_view_num_responded"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Players Responded: 0"
-                android:textSize="14sp"
-                android:contentDescription="number_of_players_responded" />
 
             <TextView
                 android:id="@+id/post_timeframe"

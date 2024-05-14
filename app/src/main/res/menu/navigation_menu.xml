@@ -6,11 +6,15 @@
         android:icon="@drawable/home"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/navigation_addPost"
-        android:title="Add Post"
-        android:icon="@drawable/addcircle"
+        android:id="@+id/navigation_messages"
+        android:title="Messages"
+        android:icon="@drawable/message"
         app:showAsAction="ifRoom" />
-
+    <item
+        android:id="@+id/navigation_maps"
+        android:title="Maps"
+        android:icon="@drawable/map_search_outline"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/navigation_notifcations"
         android:title="Notifications"

@@ -2,10 +2,13 @@ package com.example.squadup
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -17,7 +20,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,6 +29,7 @@ import java.util.*
 class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var auth: FirebaseAuth
+
     private lateinit var googleMap: GoogleMap
     private lateinit var marker: Marker
     private val defaultLocation = LatLng(37.3382, -121.8863)
@@ -35,6 +38,7 @@ class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var numPlayersEditText: EditText
     private lateinit var timeframeEditText: EditText
     private lateinit var addPostButton: Button
+    private lateinit var backButton: Button
     private val firestore by lazy { FirebaseFirestore.getInstance() }
 
     private var selectedDateTime: Calendar = Calendar.getInstance()
@@ -59,7 +63,7 @@ class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
         numPlayersEditText = findViewById(R.id.edit_text_num_players)
         timeframeEditText = findViewById(R.id.edit_text_timeframe)
         addPostButton = findViewById(R.id.button_add_post)
-        val backButton = findViewById<ImageView>(R.id.back_button)
+        backButton = findViewById(R.id.button_back)
 
         loadUserName(profileNameTextView)
         loadUserProfilePicture(userProfileImageView)
@@ -81,23 +85,23 @@ class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
         marker = googleMap.addMarker(
             MarkerOptions()
                 .position(defaultLocation)
-                .draggable(true) // Ensure marker is draggable
+                .draggable(true)
                 .title("Drag to choose location")
         )!!
 
         // Move the camera to the default location
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 15f))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 16f))
 
-        // Disable map scrolling when dragging starts
+        // Set a listener for marker drag events
         googleMap.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
-            override fun onMarkerDragStart(marker: Marker) {
-                googleMap.uiSettings.isScrollGesturesEnabled = false
-            }
-
+            override fun onMarkerDragStart(marker: Marker) {}
             override fun onMarkerDrag(marker: Marker) {}
-
             override fun onMarkerDragEnd(marker: Marker) {
-                googleMap.uiSettings.isScrollGesturesEnabled = true
+                Toast.makeText(
+                    this@GamePostCreation,
+                    "Location selected: ${marker.position.latitude}, ${marker.position.longitude}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
@@ -135,7 +139,6 @@ class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
         val newGamePost = hashMapOf(
             "sportType" to sportType,
             "numPlayers" to numPlayers,
-            "numPlayersResponded" to 0,
             "timeframe" to timeframe,
             "location" to mapOf(
                 "latitude" to marker.position.latitude,
@@ -150,7 +153,7 @@ class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
                 val documentId = documentReference.id
                 Toast.makeText(
                     this,
-                    "Game post added successfully",
+                    "Game post added successfully with ID: $documentId",
                     Toast.LENGTH_SHORT
                 ).show()
                 finish() // Go back to the previous activity
