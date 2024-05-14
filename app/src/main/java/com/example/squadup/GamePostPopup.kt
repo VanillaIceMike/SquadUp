@@ -28,7 +28,7 @@ class GamePostPopup : DialogFragment(), OnMapReadyCallback {
     private lateinit var authorImageView: ImageView
     private lateinit var authorNameTextView: TextView
     private lateinit var respondButton: Button
-    private lateinit var closeButton: Button
+    private lateinit var declineButton: Button
     private var postId: String? = null
     private val firestore by lazy { FirebaseFirestore.getInstance() }
     override fun onCreateView(
@@ -42,7 +42,8 @@ class GamePostPopup : DialogFragment(), OnMapReadyCallback {
         timeframeTextView = view.findViewById(R.id.text_view_timeframe)
         authorImageView = view.findViewById(R.id.image_view_author)
         authorNameTextView = view.findViewById(R.id.text_view_author_name)
-        respondButton = view.findViewById(R.id.button_respond)
+        respondButton = view.findViewById(R.id.button_accept)
+        declineButton = view.findViewById(R.id.button_decline)
 
         postId = arguments?.getString("POST_ID")
         Toast.makeText(context, "Opening post: $postId", Toast.LENGTH_SHORT).show()
@@ -52,7 +53,10 @@ class GamePostPopup : DialogFragment(), OnMapReadyCallback {
             postId?.let { id ->
                 updatePlayersCount(id)
             }
+            dismiss()
         }
+
+        declineButton.setOnClickListener { dismiss() }
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment_container) as? SupportMapFragment
         mapFragment?.getMapAsync(this)

@@ -3,31 +3,40 @@ package com.example.squadup
 import GamePostAdapter
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.android.material.switchmaterial.SwitchMaterial
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(){
 
     private lateinit var auth: FirebaseAuth
     private val firestore by lazy { FirebaseFirestore.getInstance() }
     private lateinit var gamePostAdapter: GamePostAdapter
     private val gamePosts = mutableListOf<GamePost>()
     private var listenerRegistration: ListenerRegistration? = null
+    private lateinit var mapViewToggle: SwitchMaterial
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,29 +53,44 @@ class HomeActivity : AppCompatActivity() {
 
         val profileNameTextView = findViewById<TextView>(R.id.user_name)
         val userProfileImageView = findViewById<ImageView>(R.id.user_profile_picture)
-        val settingsIcon = findViewById<ImageView>(R.id.settings_icon)
-        val createPostButton: View = findViewById(R.id.fab_add_game_post)
 
         val recyclerView = findViewById<RecyclerView>(R.id.game_posts_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
         gamePostAdapter = GamePostAdapter(this, gamePosts)
         recyclerView.adapter = gamePostAdapter
 
-        // Settings icon click listener
-        settingsIcon.setOnClickListener {
-            val intent = Intent(this, ProfileSetupActivity::class.java)
-            startActivity(intent)
-        }
-
-        createPostButton.setOnClickListener {
-            val intent = Intent(this, GamePostCreation::class.java)
-            startActivity(intent)
-        }
-
         setupBottomNavigationView()
         loadUserName(profileNameTextView)
         loadUserProfilePicture(userProfileImageView)
         setupGamePostsListener()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestNotificationPermission()
+        }
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("Firebase FCM", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            Log.d("Firebase FCM","Fetching FCM registration token: $token")
+        })
+
+        mapViewToggle = findViewById(R.id.view_toggle_switch)
+        mapViewToggle.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // Start the MapsActivity
+                val intent = Intent(this, MapsActivity::class.java)
+                startActivity(intent)
+                // Optionally reset the toggle switch to off after switching activity
+                mapViewToggle.isChecked = false
+            }
+        }
+
     }
 
     private fun loadUserName(profileNameTextView: TextView) {
@@ -137,6 +161,22 @@ class HomeActivity : AppCompatActivity() {
         listenerRegistration?.remove()
     }
 
+    private fun requestNotificationPermission() {
+        if (!NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Notification Permission")
+                .setMessage("We need permission to send you notifications. Please allow this in the next prompt.")
+                .setPositiveButton("OK") { dialog, which ->
+                    val intent = Intent()
+                    intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
+                    intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
+                    startActivity(intent)
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+    }
+
     private fun setupBottomNavigationView() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
@@ -146,11 +186,8 @@ class HomeActivity : AppCompatActivity() {
                 R.id.navigation_home -> {
                     true
                 }
-                R.id.navigation_messages -> {
-                    true
-                }
-                R.id.navigation_maps -> {
-                    val intent = Intent(this, MapsActivity::class.java)
+                R.id.navigation_addPost -> {
+                    val intent = Intent(this, GamePostCreation::class.java)
                     startActivity(intent)
                     true
                 }
@@ -166,5 +203,6 @@ class HomeActivity : AppCompatActivity() {
         // Set the Maps item as selected
         bottomNavigationView.setSelectedItemId(R.id.navigation_home)
     }
+
 }
 

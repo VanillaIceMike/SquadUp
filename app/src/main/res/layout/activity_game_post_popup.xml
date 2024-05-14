@@ -103,18 +103,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+
     <!-- Respond Button -->
-    <Button
-        android:id="@+id/button_respond"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/action_buttons_layout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Respond"
-        android:padding="8dp"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/map_fragment_container"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Decline Button -->
+        <Button
+            android:id="@+id/button_decline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="✘ Decline"
+            android:padding="8dp" />
+
+        <!-- Accept Button -->
+        <Button
+            android:id="@+id/button_accept"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:text="✔ Accept"
+            android:padding="8dp" />
+
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

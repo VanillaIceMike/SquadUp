@@ -3,8 +3,10 @@ package com.example.squadup
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
+import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,5 +29,24 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        FirebaseMessaging.getInstance().subscribeToTopic("game-updates")
+            .addOnCompleteListener { task ->
+                var msg = "Subscription successful"
+                if (!task.isSuccessful) {
+                    msg = "Subscription failed"
+                }
+                Log.d("Firebase FCM", msg)
+            }
+
+        FirebaseMessaging.getInstance().subscribeToTopic("response-updates")
+            .addOnCompleteListener { task ->
+                var msg = "Subscription successful"
+                if (!task.isSuccessful) {
+                    msg = "Subscription failed"
+                }
+                Log.d("Firebase FCM", msg)
+            }
+
     }
+
 }

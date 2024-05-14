@@ -33,7 +33,6 @@ class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var numPlayersEditText: EditText
     private lateinit var timeframeEditText: EditText
     private lateinit var addPostButton: Button
-    private lateinit var backButton: Button
     private val firestore by lazy { FirebaseFirestore.getInstance() }
 
     private var selectedDateTime: Calendar = Calendar.getInstance()
@@ -58,7 +57,7 @@ class GamePostCreation : AppCompatActivity(), OnMapReadyCallback {
         numPlayersEditText = findViewById(R.id.edit_text_num_players)
         timeframeEditText = findViewById(R.id.edit_text_timeframe)
         addPostButton = findViewById(R.id.button_add_post)
-        backButton = findViewById(R.id.button_back)
+        val backButton = findViewById<ImageView>(R.id.back_button)
 
         loadUserName(profileNameTextView)
         loadUserProfilePicture(userProfileImageView)
