@@ -1,0 +1,28 @@
+Index: app/src/main/res/layout/activity_home.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/main\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@android:color/darker_gray\"\r\n    tools:context=\".HomeActivity\">\r\n\r\n    <!-- Top bar with user profile and settings -->\r\n    <RelativeLayout\r\n        android:id=\"@+id/top_bar\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_alignParentTop=\"true\"\r\n        android:padding=\"16dp\"\r\n        android:background=\"@android:color/white\">\r\n\r\n        <!-- User Profile Picture -->\r\n        <ImageView\r\n            android:id=\"@+id/user_profile_picture\"\r\n            android:layout_width=\"58dp\"\r\n            android:layout_height=\"58dp\"\r\n            android:src=\"@drawable/profile_pic_placeholder\"\r\n            android:scaleType=\"centerCrop\"\r\n            android:layout_alignParentStart=\"true\"\r\n            android:layout_centerVertical=\"true\"\r\n            android:contentDescription=\"user_profile_picture\" />\r\n\r\n        <!-- User Name -->\r\n        <TextView\r\n            android:id=\"@+id/user_name\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_toEndOf=\"@id/user_profile_picture\"\r\n            android:layout_marginStart=\"8dp\"\r\n            android:text=\"User Name\"\r\n            android:clickable=\"true\"\r\n            android:focusable=\"true\"\r\n            android:textSize=\"18sp\"\r\n            android:textStyle=\"bold\"\r\n            android:layout_centerVertical=\"true\" />\r\n\r\n        <!-- Settings Icon -->\r\n        <ImageView\r\n            android:id=\"@+id/settings_icon\"\r\n            android:layout_width=\"58dp\"\r\n            android:layout_height=\"58dp\"\r\n            android:src=\"@drawable/settings_icon\"\r\n            android:layout_alignParentEnd=\"true\"\r\n            android:layout_centerVertical=\"true\"\r\n            android:contentDescription=\"settings_icon\"\r\n            android:layout_marginStart=\"8dp\"\r\n            android:layout_marginEnd=\"8dp\"\r\n            android:clickable=\"true\"\r\n            android:focusable=\"true\" />\r\n    </RelativeLayout>\r\n\r\n    <ScrollView\r\n        android:id=\"@+id/scroll_view\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:layout_below=\"@id/top_bar\"\r\n        android:layout_above=\"@id/bottom_navigation\"\r\n        android:padding=\"8dp\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"vertical\">\r\n\r\n\r\n            <androidx.recyclerview.widget.RecyclerView\r\n                android:id=\"@+id/game_posts_recycler_view\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"563dp\"\r\n                android:layout_marginBottom=\"8dp\"\r\n                android:nestedScrollingEnabled=\"false\" />\r\n        </LinearLayout>\r\n    </ScrollView>\r\n\r\n    <com.google.android.material.bottomnavigation.BottomNavigationView\r\n        android:id=\"@+id/bottom_navigation\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:background=\"@android:color/white\"\r\n        android:layout_alignParentBottom=\"true\"\r\n        app:menu=\"@menu/navigation_menu\" />\r\n\r\n    <com.google.android.material.floatingactionbutton.FloatingActionButton\r\n        android:id=\"@+id/fab_add_game_post\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_alignParentEnd=\"true\"\r\n        android:layout_above=\"@id/bottom_navigation\"\r\n        android:layout_marginEnd=\"16dp\"\r\n        android:layout_marginBottom=\"16dp\"\r\n        android:background=\"@drawable/fab_background\"\r\n        android:src=\"@drawable/plusbutton\"/>\r\n\r\n</RelativeLayout>\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_home.xml b/app/src/main/res/layout/activity_home.xml
+--- a/app/src/main/res/layout/activity_home.xml	(revision 496a0fa312c7b720368f70dd0a031d95c0b5577d)
++++ b/app/src/main/res/layout/activity_home.xml	(date 1715662284388)
+@@ -42,7 +42,7 @@
+             android:layout_centerVertical="true" />
+ 
+         <!-- Settings Icon -->
+-        <ImageView
++        <!--<ImageView
+             android:id="@+id/settings_icon"
+             android:layout_width="58dp"
+             android:layout_height="58dp"
+@@ -53,7 +53,7 @@
+             android:layout_marginStart="8dp"
+             android:layout_marginEnd="8dp"
+             android:clickable="true"
+-            android:focusable="true" />
++            android:focusable="true"--> />
+     </RelativeLayout>
+ 
+     <ScrollView
