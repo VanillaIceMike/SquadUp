@@ -1,35 +1,31 @@
 package com.example.squadup
 
 import GamePostAdapter
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.FirebaseMessagingService
+import androidx.activity.enableEdgeToEdge
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.app.NotificationManagerCompat
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 
-class HomeActivity : AppCompatActivity(){
+class HomeActivity : BaseActivity() {
 
     private lateinit var auth: FirebaseAuth
     private val firestore by lazy { FirebaseFirestore.getInstance() }
@@ -73,50 +69,39 @@ class HomeActivity : AppCompatActivity(){
             requestNotificationPermission()
         }
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("Firebase FCM", "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
+                return@addOnCompleteListener
             }
 
-            // Get new FCM registration token
             val token = task.result
-
-            Log.d("Firebase FCM","Fetching FCM registration token: $token")
-        })
+            Log.d("Firebase FCM", "Fetching FCM registration token: $token")
+        }
 
         mapViewToggle = findViewById(R.id.view_toggle_switch)
         mapViewToggle.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                // Start the MapsActivity
                 val intent = Intent(this, MapsActivity::class.java)
                 startActivity(intent)
-                // Optionally reset the toggle switch to off after switching activity
                 mapViewToggle.isChecked = false
             }
         }
-
     }
 
     private fun loadUserName(profileNameTextView: TextView) {
         val user: FirebaseUser? = auth.currentUser
-
-        // If the user is authenticated
         user?.let {
             profileNameTextView.text = it.displayName ?: "Anonymous"
         } ?: run {
-            // Fallback if the user is not logged in
             profileNameTextView.text = "Guest"
         }
     }
 
     private fun loadUserProfilePicture(userProfileImageView: ImageView) {
         val user: FirebaseUser? = auth.currentUser
-
-        // If the user is authenticated
         user?.let {
             val profilePictureUri: Uri? = it.photoUrl
-
             if (profilePictureUri != null) {
                 userProfileImageView.setImageURI(profilePictureUri)
             } else {
@@ -129,11 +114,7 @@ class HomeActivity : AppCompatActivity(){
         listenerRegistration = firestore.collection("game_posts")
             .addSnapshotListener { snapshots, exception ->
                 if (exception != null) {
-                    Toast.makeText(
-                        this,
-                        "Error loading game posts: ${exception.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this, "Error loading game posts: ${exception.message}", Toast.LENGTH_SHORT).show()
                     return@addSnapshotListener
                 }
 
@@ -172,9 +153,10 @@ class HomeActivity : AppCompatActivity(){
                 .setTitle("Notification Permission")
                 .setMessage("We need permission to send you notifications. Please allow this in the next prompt.")
                 .setPositiveButton("OK") { dialog, which ->
-                    val intent = Intent()
-                    intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-                    intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
+                    val intent = Intent().apply {
+                        action = "android.settings.APP_NOTIFICATION_SETTINGS"
+                        putExtra("android.provider.extra.APP_PACKAGE", packageName)
+                    }
                     startActivity(intent)
                 }
                 .setNegativeButton("Cancel", null)
@@ -184,13 +166,9 @@ class HomeActivity : AppCompatActivity(){
 
     private fun setupBottomNavigationView() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.navigation_home -> {
-                    // Stay in HomeActivity
-                    true
-                }
+                R.id.navigation_home -> true
                 R.id.navigation_addPost -> {
                     val intent = Intent(this, GamePostCreation::class.java).apply {
                         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -208,10 +186,6 @@ class HomeActivity : AppCompatActivity(){
                 else -> false
             }
         }
-
-        // Set the Home item as selected
         bottomNavigationView.selectedItemId = R.id.navigation_home
     }
-
 }
-
