@@ -248,16 +248,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
+                    // Stay in HomeActivity
                     true
                 }
                 R.id.navigation_addPost -> {
-                    val intent = Intent(this, GamePostCreation::class.java)
+                    val intent = Intent(this, GamePostCreation::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    }
                     startActivity(intent)
                     true
                 }
                 R.id.navigation_notifcations -> {
-                    // Placeholder for Notifications
-                    Toast.makeText(this, "Notifications feature under development", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, NotificationsDisplayActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    }
+                    startActivity(intent)
                     true
                 }
                 else -> false
