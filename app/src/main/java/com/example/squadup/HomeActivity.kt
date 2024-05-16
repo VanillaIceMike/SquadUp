@@ -55,6 +55,7 @@ class HomeActivity : BaseActivity() {
         gamePostAdapter = GamePostAdapter(this, gamePosts)
         recyclerView.adapter = gamePostAdapter
 
+
         profileNameTextView.setOnClickListener {
             val intent = Intent(this, ProfileSetupActivity::class.java)
             startActivity(intent)
@@ -115,30 +116,37 @@ class HomeActivity : BaseActivity() {
             .addSnapshotListener { snapshots, exception ->
                 if (exception != null) {
                     Toast.makeText(this, "Error loading game posts: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    Log.e("Firestore", "Error loading game posts", exception)
                     return@addSnapshotListener
                 }
 
-                snapshots?.documentChanges?.forEach { change ->
-                    val gamePost = change.document.toObject(GamePost::class.java).copy(id = change.document.id)
-
-                    when (change.type) {
-                        DocumentChange.Type.ADDED -> gamePosts.add(gamePost)
-                        DocumentChange.Type.MODIFIED -> {
-                            val index = gamePosts.indexOfFirst { it.id == gamePost.id }
-                            if (index != -1) {
-                                gamePosts[index] = gamePost
+                if (snapshots != null) {
+                    for (change in snapshots.documentChanges) {
+                        val gamePost = change.document.toObject(GamePost::class.java).copy(id = change.document.id)
+                        when (change.type) {
+                            DocumentChange.Type.ADDED -> {
+                                gamePosts.add(gamePost)
+                                Log.d("Firestore", "Added: ${gamePost.id}")
                             }
-                        }
-                        DocumentChange.Type.REMOVED -> {
-                            val index = gamePosts.indexOfFirst { it.id == gamePost.id }
-                            if (index != -1) {
-                                gamePosts.removeAt(index)
+                            DocumentChange.Type.MODIFIED -> {
+                                val index = gamePosts.indexOfFirst { it.id == gamePost.id }
+                                if (index != -1) {
+                                    gamePosts[index] = gamePost
+                                    Log.d("Firestore", "Modified: ${gamePost.id}")
+                                }
+                            }
+                            DocumentChange.Type.REMOVED -> {
+                                val index = gamePosts.indexOfFirst { it.id == gamePost.id }
+                                if (index != -1) {
+                                    gamePosts.removeAt(index)
+                                    Log.d("Firestore", "Removed: ${gamePost.id}")
+                                }
                             }
                         }
                     }
+                    gamePostAdapter.notifyDataSetChanged()
+                    Log.d("Firestore", "DataSet changed, notifying adapter. Total items: ${gamePosts.size}")
                 }
-
-                gamePostAdapter.notifyDataSetChanged()
             }
     }
 

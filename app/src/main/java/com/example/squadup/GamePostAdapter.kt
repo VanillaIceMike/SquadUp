@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.squadup.GamePost
@@ -75,7 +76,10 @@ class GamePostAdapter(
         }
     }
 
-    override fun getItemCount(): Int = gamePosts.size
+    override fun getItemCount(): Int {
+        Log.d("GamePostAdapter", "getItemCount: ${gamePosts.size}")
+        return gamePosts.size
+    }
 
     private fun getAddressFromCoordinates(latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(context, Locale.getDefault())
