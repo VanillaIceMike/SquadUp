@@ -25,6 +25,7 @@ class CodeVerificationActivity2 : AppCompatActivity() {
         binding = ActivityCodeVerificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -40,7 +41,8 @@ class CodeVerificationActivity2 : AppCompatActivity() {
             if (code.isNotEmpty()) {
                 verifyCode(verificationId, code)
             } else {
-                Toast.makeText(this, "Please enter the verification code", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter the verification code", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -64,18 +66,24 @@ class CodeVerificationActivity2 : AppCompatActivity() {
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
-            if (task.isSuccessful) {
-                Toast.makeText(this, "Verification successful", Toast.LENGTH_SHORT).show()
-                // Redirect the user to HomeActivity after successful verification
-                val homeIntent = Intent(this, HomeActivity::class.java)
-                homeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(homeIntent)
-            } else {
-                // If sign in fails, display a message to the user.
-                Toast.makeText(this, "Verification failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Verification successful", Toast.LENGTH_SHORT).show()
+                    // Redirect the user to HomeActivity
+                    val homeIntent = Intent(this, HomeActivity::class.java)
+                    homeIntent.flags =
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(homeIntent)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Toast.makeText(
+                        this,
+                        "Verification failed: ${task.exception?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
-        }
     }
-
 }
+

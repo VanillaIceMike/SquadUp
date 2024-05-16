@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.content.Intent
 import android.util.Log
 import android.widget.Button
+import androidx.activity.enableEdgeToEdge
 import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
         val signInButton: Button = findViewById(R.id.signInButton)
