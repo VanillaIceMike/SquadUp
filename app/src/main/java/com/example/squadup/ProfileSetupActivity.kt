@@ -59,7 +59,10 @@ class ProfileSetupActivity : AppCompatActivity() {
         }
 
 
-        backButton.setOnClickListener { finish() }
+        backButton.setOnClickListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 
