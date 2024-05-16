@@ -257,7 +257,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 R.id.navigation_notifcations -> {
                     // Placeholder for Notifications
-                    Toast.makeText(this, "Notifications feature under development", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, NotificationsDisplayActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 else -> false
